@@ -1,6 +1,5 @@
 from flask import Flask
 from routes.ProductsRouter import Product
-from schemas import Productschema
 from settings.db import db
 import json
 
@@ -11,7 +10,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1000579643@127.0.0
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
-schemaPr = Productschema.ProductSchema()
 
 app.register_blueprint(Product)
 

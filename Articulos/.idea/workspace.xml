@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d462ab1d-cd37-4ea0-8481-554fc045044d" name="Changes" comment="" />
+    <list default="true" id="d462ab1d-cd37-4ea0-8481-554fc045044d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../shopp/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../shopp/models/invoice.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/models/invoice.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../shopp/schemas/invoiceSchema.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/schemas/invoiceSchema.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../shopp/schemas/ventaSchema.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/schemas/ventaSchema.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../shopp/settings/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/settings/database.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,10 +22,14 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2HPxekUFLfKmiohuNNO8nIo2yh4" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -27,7 +39,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/haner/Desktop/aplicaciones/administracion de tiendas/Articulos/main.py&quot;
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/haner/Desktop/aplicaciones/administracion de tiendas/Articulos&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -69,6 +81,17 @@
       <updated>1668200616526</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

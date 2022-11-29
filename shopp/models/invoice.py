@@ -15,3 +15,6 @@ class invoice(db.Model, BaseModel):
 
     def datatime(self):
         return datetime.now()
+
+    def setTotal(self, total):
+        self.total=total

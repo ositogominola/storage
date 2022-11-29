@@ -18,4 +18,6 @@ class venta(db.Model, BaseModel):
         self.idfactura=data["idfactura"]
         self.cantidad=data["cantidad"]
         self.precioUn=data["precioUn"]
-        self.precioTot=data["precioTotal"]
+
+    def precio_total(self):
+        self.precioTot=self.cantidad*self.precioUn
