@@ -30,12 +30,7 @@ class invoiceController():
         facturaUn.save()
         return self.schemainv.dump(facturaUn)
 
-    def get_all_by_id(self,id):
+    def get_all_by_id(self,empresa):
         dat=invoice()
-        dotos=dat.get_by_id(id)
-        datos=dat.get_all()
-
-        if len(dotos)>1:
-            return self.schemasinv.dump(dotos)
-        else:
-            return self.schemainv.dump(dotos)
+        produ=dat.simple_filter(empresa=empresa)
+        return self.schemasinv.dump(produ)
