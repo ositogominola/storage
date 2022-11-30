@@ -15,6 +15,7 @@ class superController:
             productos = self.prdCon.POST(produ)
             total+=productos["ventaProduc"]["precioTot"]
             prod.append(productos)
-        factura=self.fctCon.UPDATE_TOTAL(factura["ventaProduc"]["id"],total)
+
+        factura=self.fctCon.UPDATE_TOTAL(factura["ventaProduc"]["id"],total,data["empresa"])
         dicti = {"factura": factura, "productos": prod}
         return dicti

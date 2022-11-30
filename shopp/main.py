@@ -9,9 +9,9 @@ databasesetting(app)
 db.init_app(app)
 
 app.register_blueprint(venta)
-"""with app.app_context():
+with app.app_context():
     db.drop_all()
-    db.create_all()"""
+    db.create_all()
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

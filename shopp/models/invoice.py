@@ -8,10 +8,14 @@ class invoice(db.Model, BaseModel):
     id=db.Column(db.Integer, primary_key=True)
     fecha=db.Column(db.DateTime)
     total=db.Column(db.Integer)
-    venta=db.relationship("venta", backref='invoice')
+    empresa=db.Column(db.String(20))
+    venta=db.relationship("venta", backref='invoice', cascade='delete')
 
     def __init__(self):
         self.fecha=self.datatime()
+
+    def setEmpresa(self, empresa):
+        self.empresa=empresa
 
     def datatime(self):
         return datetime.now()

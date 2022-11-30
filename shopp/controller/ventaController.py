@@ -26,3 +26,6 @@ class ventaController:
 
     def GET_ALL(self):
         return self.schemasVnt.dump(venta.get_all())
+
+    def GET_BY_ID(self,id):
+        return self.schemaVnt.dump(venta.get_by_id(id))

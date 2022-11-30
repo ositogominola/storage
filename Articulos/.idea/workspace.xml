@@ -2,13 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d462ab1d-cd37-4ea0-8481-554fc045044d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shopp/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../shopp/controller/invoiceController.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/controller/invoiceController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../shopp/controller/ventaController.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/controller/ventaController.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../shopp/models/invoice.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/models/invoice.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../shopp/routers/ventasRoute.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/routers/ventasRoute.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../shopp/schemas/invoiceSchema.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/schemas/invoiceSchema.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shopp/schemas/ventaSchema.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/schemas/ventaSchema.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shopp/settings/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/settings/database.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
