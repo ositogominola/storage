@@ -58,6 +58,27 @@ class ventaController:
                 successful = False
                 message = "no hay productos registrados"
             else:
+                PRT = self.schemaVnt.dump(facturas)
+                successful = True
+                message = "facturas cargadas"
+        except Exception as e:
+            PRT = None
+            successful = False
+            message = "ERROR {}, TYPE {}".format(e.args, type(e))
+        data["PRT"] = PRT
+        data["successful"] = successful
+        data["message"] = message
+        return data
+
+    def GET_BY_ID_EM(self,empresa):
+        data = {}
+        try:
+            facturas = self.model.simple_filter(idempresa=empresa)
+            if facturas is None:
+                PRT = None
+                successful = False
+                message = "no hay productos registrados"
+            else:
                 PRT = self.schemasVnt.dump(facturas)
                 successful = True
                 message = "facturas cargadas"

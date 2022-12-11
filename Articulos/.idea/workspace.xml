@@ -2,11 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d462ab1d-cd37-4ea0-8481-554fc045044d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../carshopp/.idea/carshopp.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../carshopp/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../carshopp/model/car.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../carshopp/routers/genericRouters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../gateway/.idea/gateway.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../gateway/Routers/articulosrouters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../gateway/Routers/shopRouters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../gateway/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../gateway/settings/config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../gateway/settings/loadFileConfig.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/ControllerInfProduc.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/ControllerInfProduc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/ControllerProd.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/ControllerProd.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/ProductsRouter.py" beforeDir="false" afterPath="$PROJECT_DIR$/routes/ProductsRouter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../shopp/controller/invoiceController.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/controller/invoiceController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../shopp/controller/superController.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/controller/superController.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../shopp/controller/ventaController.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/controller/ventaController.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shopp/models/invoice.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/models/invoice.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../shopp/routers/ventasRoute.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/routers/ventasRoute.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shopp/schemas/invoiceSchema.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/schemas/invoiceSchema.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,13 +46,14 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/haner/Desktop/aplicaciones/administracion de tiendas/Articulos&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "C:/Users/haner/Desktop/aplicaciones/administracion de tiendas/Articulos"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\haner\Desktop\aplicaciones\administracion de tiendas\Articulos\settings" />
@@ -96,38 +110,78 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>123</line>
+          <line>132</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>103</line>
+          <line>110</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>61</line>
+          <line>66</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>41</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>11</line>
+          <line>13</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>140</line>
+          <line>151</line>
           <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>82</line>
+          <line>88</line>
           <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
+          <line>45</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/routes/ProductsRouter.py</url>
+          <line>19</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/routes/ProductsRouter.py</url>
+          <line>25</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/routes/ProductsRouter.py</url>
+          <line>12</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/routes/ProductsRouter.py</url>
+          <line>31</line>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/routes/ProductsRouter.py</url>
+          <line>37</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/routes/ProductsRouter.py</url>
+          <line>50</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/routes/ProductsRouter.py</url>
+          <line>43</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
+          <line>21</line>
+          <option name="timeStamp" value="31" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

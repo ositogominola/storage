@@ -89,6 +89,29 @@ class invoiceController():
         data["message"] = message
         return data
 
+    #obtiene factura por id
+    def get_all_by_id(self,id):
+        data = {}
+        try:
+            facturas = self.model.get_by_id(id)
+            if facturas is None:
+                FCT = None
+                successful = False
+                message = "no hay productos registrados"
+            else:
+                FCT = self.schemainv.dump(facturas)
+                successful = True
+                message = "facturas cargadas"
+        except Exception as e:
+            FCT = None
+            successful = False
+            message = "ERROR {}, TYPE {}".format(e.args, type(e))
+        data["FCT"] = FCT
+        data["successful"] = successful
+        data["message"] = message
+        return data
+
+
     #elimina una factura con todos los productos que esta tenga
     def delete_by_id(self,id):
         dicti = {}

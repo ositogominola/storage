@@ -32,15 +32,27 @@ class InfProdController:
         dicti["message"] = message
         return dicti
 
-    def get_all(self):
-        pass
-
-    def get_by_id(self):
-        pass
-
     def get_by_data(self, **data):
         try:
             producto = infPoduct.simple_filter(**data)
+            if producto is None:
+                return "el producto no fue encontrado"
+        except Exception as e:
+            return e.args
+        return self.schemaInfoProds.dump(producto)
+
+    def get_all(self):
+        try:
+            producto = infPoduct.get_all()
+            if producto is None:
+                return "el producto no fue encontrado"
+        except Exception as e:
+            return e.args
+        return self.schemaInfoProds.dump(producto)
+
+    def get_by_id(self, id):
+        try:
+            producto = infPoduct.get_by_id(id)
             if producto is None:
                 return "el producto no fue encontrado"
         except Exception as e:
