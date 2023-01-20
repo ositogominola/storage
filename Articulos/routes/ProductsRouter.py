@@ -31,13 +31,14 @@ def get_all():
 # obtiene los productos por el id del producto
 @Product.route("/producto/<int:id>", methods=["GET"])
 def get_by_id(id):
-    return controllerPro.get_by_id(id)
-
+    idEmpresa=request.get_json()
+    return controllerPro.get_by_id(id,idEmpresa)
 
 # elimina un producto por el id
 @Product.route("/producto/<int:id>", methods=["DELETE"])
 def delete(id):
-    return controllerPro.delete(id)
+    idEmpresa=request.get_json()
+    return controllerPro.delete(id,idEmpresa)
 
 
 # filtra los productos por medio de un json pasado por el request

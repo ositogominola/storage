@@ -21,7 +21,8 @@ def create_art():
 def delete_Art(id):
     headers = {"Content-Type": "application/json; charset=utf-8"}
     url = dataConfig["url-backend-Articulos"] + '/producto/' + str(id)
-    response = requests.delete(url, headers=headers)
+    json = request.get_json()
+    response = requests.delete(url, headers=headers,json=json)
     return response.json()
 
 
@@ -40,7 +41,8 @@ def update_Art(id):
 def get_articulo_id(id):
     headers = {"Content-Type": "application/json; charset=utf-8"}
     url = dataConfig["url-backend-Articulos"] + '/producto/' + str(id)
-    response = requests.get(url, headers=headers)
+    json=request.get_json()
+    response = requests.get(url, headers=headers, json=json)
     return response.json()
 
 

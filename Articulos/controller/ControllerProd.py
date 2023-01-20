@@ -19,7 +19,7 @@ class ControlerProduct(Producto):
         return False
 
     #crea un producto sin su informacion
-    def post(self, data,idEmpresa,inf):
+    def post(self, data, idEmpresa):
         dicti = {}
         try:
             product_schema = self.schemaPr.load(data)
@@ -86,7 +86,7 @@ class ControlerProduct(Producto):
         return dicti
 
     #obtiene por un id
-    def get_by_id(self, id):
+    def get_by_id(self, id, idEmpresa):
         dicti={}
         try:
             Prd = Producto.get_by_id(id=id)
@@ -95,9 +95,14 @@ class ControlerProduct(Producto):
                 successful = False
                 message = "el producto bajo el id {} no existe".format(id)
             else:
-                successful = True
-                message = "productos cargados"
-                producto=self.schemaPr.dump(Prd)
+                if idEmpresa["idEmpresa"]==Prd.prdinfo.idEmpresa:
+                    successful = True
+                    message = "productos cargados"
+                    producto=self.schemaPr.dump(Prd)
+                else:
+                    successful = True
+                    message = "la empresa no tiene el elemnto con id {}".format(idEmpresa["idEmpresa"])
+                    producto = None
         except Exception as e:
             producto = None
             successful = False
@@ -111,8 +116,12 @@ class ControlerProduct(Producto):
     def get_by_data(self,empresa, **data):
         dicti={}
         try:
-            Prd =db.session.query(Producto).filter_by(**data).join(infProduct).filter(infProduct.idEmpresa==empresa).all()
-            if Prd is []:
+            name = data.get('name', '')
+            if name != '':
+                data.pop('name')
+            search = "%{}%".format(name)
+            Prd =Producto.query.filter(Producto.name.like(search)).filter_by(**data).join(infProduct).filter(infProduct.idEmpresa==empresa).all()
+            if not Prd:
                 producto = None
                 successful = False
                 message = "producto no encontrado"
@@ -130,7 +139,7 @@ class ControlerProduct(Producto):
         return dicti
 
     #elimina el articulo con su informacion
-    def delete(self, id):
+    def delete(self, id, idEmpresa):
         dicti={}
         try:
             producto = Producto.get_by_id(id=id)
@@ -138,9 +147,13 @@ class ControlerProduct(Producto):
                 successful = False
                 message = "el producto bajo el id {} no existe".format(id)
             else:
-                producto.delete()
-                successful = True
-                message = "el producto bajo el id {} fue eliminado correctamente".format(id)
+                if idEmpresa["idEmpresa"] == producto.prdinfo.idEmpresa:
+                    producto.delete()
+                    successful = True
+                    message = "el producto bajo el id {} fue eliminado correctamente".format(id)
+                else:
+                    successful = True
+                    message = "la empresa no tiene el elemnto con id {}".format(idEmpresa["idEmpresa"])
         except Exception as e:
             successful = False
             message = "ERROR: {}, TYPE: {}".format(e.args, type(e))
@@ -158,16 +171,26 @@ class ControlerProduct(Producto):
                 successful = False
                 message = "el producto bajo el id {} no existe".format(id)
             else:
-                for dt in data["Product"]:
-                    if hasattr(producto, dt):
-                        setattr(producto, dt, data["Product"][dt])
-                for dt in data["infoPro"]:
-                    if hasattr(producto.prdinfo, dt) and dt!="idEmpresa": #no se puede cambiar el id de empresa
-                        setattr(producto.prdinfo, dt,data["infoPro"][dt])
-                producto.save()
-                productoU = self.schemaPr.dump(producto)
-                successful = False
-                message = "el producto bajo el id {} fue actualizado".format(id)
+                if producto.prdinfo.idEmpresa==data["infoPro"]["idEmpresa"]:
+                    if not self.comprobar_repeticion_empresa(data["Product"],producto.prdinfo.idEmpresa):
+                        for dt in data["Product"]:
+                            if hasattr(producto, dt):
+                                setattr(producto, dt, data["Product"][dt])
+                        for dt in data["infoPro"]:
+                            if hasattr(producto.prdinfo, dt) and dt!="idEmpresa": #no se puede cambiar el id de empresa
+                                setattr(producto.prdinfo, dt,data["infoPro"][dt])
+                        producto.save()
+                        productoU = self.schemaPr.dump(producto)
+                        successful = True
+                        message = "el producto bajo el id {} fue actualizado".format(id)
+                    else:
+                        productoU = None
+                        successful = True
+                        message = "ya existe un producto con el nombre {}".format(data["Product"]["name"])
+                else:
+                    productoU = None
+                    successful = False
+                    message = "el producto bajo el id {} no existe".format(id)
         except Exception as e:
             productoU = None
             successful = False

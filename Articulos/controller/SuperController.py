@@ -9,10 +9,13 @@ class SuperController:
 
     def post_all(self, data):
         dicti={}
-        Prd=self.ProductoContro.post(data["Product"],data["infoPro"]["idEmpresa"],data["infoPro"])
+        if data["infoPro"]["stock"]>0:
+            Prd=self.ProductoContro.post(data["Product"],data["infoPro"]["idEmpresa"])
+        else:
+            Prd=None
         dicti["producto"]=Prd
-
-        if Prd["Producto"] is not None:
+        if Prd is not None:
+            print("si es")
             data["infoPro"]["idProducto"]=Prd["Producto"]
             inf=self.infoProduc.post(data["infoPro"])
             dicti["infoProducto"]=inf
