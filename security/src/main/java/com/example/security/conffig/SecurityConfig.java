@@ -1,5 +1,6 @@
 package com.example.security.conffig;
 
+import com.example.security.userDetailsService.jpaUserDetailsService;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -17,6 +18,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -29,10 +32,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    //llaves privadas y publicas
     private final RsaKeyProperties rsaKeys;
+    private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(RsaKeyProperties rsaKeys) {
+    public SecurityConfig(RsaKeyProperties rsaKeys, jpaUserDetailsService JpaUserDetailsService) {
         this.rsaKeys = rsaKeys;
+        this.userDetailsService = JpaUserDetailsService;
     }
 
     @Bean
@@ -42,12 +48,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests( auth -> auth
                         .anyRequest().authenticated() // (2)
                 )
+                .userDetailsService(userDetailsService)
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // (3)
                 .httpBasic(Customizer.withDefaults()) // (4)
                 .build();
     }
 
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
@@ -60,13 +71,5 @@ public class SecurityConfig {
         return new NimbusJwtEncoder(jwks);
     }
 
-    @Bean
-    public InMemoryUserDetailsManager users() {
-        return new InMemoryUserDetailsManager(
-                User
-                        .withUsername("dvega")
-                        .password("{noop}password")
-                        .authorities("read")
-                        .build());
-    }
+
 }
