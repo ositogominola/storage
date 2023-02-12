@@ -1,27 +1,34 @@
 package com.example.security.models;
 
+import com.example.security.repositories.rolesRepositorie;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class SecurityUser implements UserDetails {
 
     private final user userown;
+    private rolesRepositorie rols;
 
     public SecurityUser(user userinfo) {
         this.userown = userinfo;
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(userown
-                        .getRoles()
-                        .split(","))
-                .map(SimpleGrantedAuthority::new)
-                .toList();
+        roles rols = userown.getRoles();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        System.out.println("roles: "+ rols);
+        authorities.add(new SimpleGrantedAuthority(rols.getName()));
+
+        return authorities;
+
     }
 
     @Override
