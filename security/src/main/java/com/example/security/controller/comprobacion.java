@@ -16,6 +16,7 @@ public class comprobacion {
     @Autowired
     private classRolRepo rlp;
 
+    //obtener rols
     @GetMapping("/getRol/{name}")
     public roles getrol(@PathVariable(value = "name") String name){
         return rlp.findroltByname(name);

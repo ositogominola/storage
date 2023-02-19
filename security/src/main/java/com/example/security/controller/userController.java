@@ -6,12 +6,11 @@ import com.example.security.models.user;
 import com.example.security.repositories.permissionRepositorie;
 import com.example.security.repositories.rolesRepositorie;
 import com.example.security.repositories.userRepositorie;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -29,7 +28,7 @@ public class userController {
     private permissionRepositorie pr;
 
 
-
+    //crear permiso
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/createPermissions")
     public String create_permission(@RequestBody permission per){
@@ -39,11 +38,11 @@ public class userController {
         }
         else {
             this.pr.save(per);
-            return "permiso creado";
+            return "id: "+per.getIdPermission()+" use este id para asignaciones";
         }
     }
 
-
+    //añadir permiso a rol
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/addpermission/{idper}/rol/{idrol}")
     public String addpermission(@PathVariable(value = "idper") String idper,@PathVariable(value = "idrol") String idrol){
@@ -63,6 +62,7 @@ public class userController {
         }
     }
 
+    //crear rol
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/createRole")
     public String create_rol(@RequestBody roles rol){
@@ -71,10 +71,11 @@ public class userController {
         }
         else {
             this.rlr.save(rol);
-            return "rol creado";
+            return "id rol: "+rol.getIdRol()+" nombre: "+rol.getName();
         }
     }
 
+    //crear usuario
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/create")
     public String create_user (@RequestBody user infoUsuario){
@@ -97,23 +98,12 @@ public class userController {
     }
 
     @GetMapping
-    public String prueba(){
-        System.out.println("llegoooooo");
-        return "llego";
-    }
+    public user prueba(Authentication authentication){
 
-    @GetMapping("/2")
-    public String pr2(HttpServletRequest request)
-    {
-        System.out.println("servidor 2");
-        String uri = "http://127.0.0.1:8080/user";
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", request.getHeader("Authorization"));
-        HttpEntity<String> httpEntity = new HttpEntity<>("some body", headers);
-        ResponseEntity<String> result=restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class);
-        result.getBody();
-        return result.getBody()+"2";
+        user owneruser=ur.findByUsername(authentication.getName()).get();
+        owneruser.setPassword("");
+
+        return owneruser;
     }
 
     @Autowired

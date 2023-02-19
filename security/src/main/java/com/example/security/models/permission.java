@@ -2,11 +2,13 @@ package com.example.security.models;
 
 import jakarta.persistence.*;
 
-import lombok.Data;
+import lombok.*;
 
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
+@ToString
 @Entity
 @Table(name = "permission")
 public class permission {

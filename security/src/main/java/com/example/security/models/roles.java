@@ -2,12 +2,14 @@ package com.example.security.models;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
+@ToString
 @Entity
 @Table(name = "roles")
 public class roles {

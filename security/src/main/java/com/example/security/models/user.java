@@ -1,12 +1,16 @@
 package com.example.security.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.collection.spi.PersistentSet;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
+@ToString
 @Entity
 @Table(name = "user")
 public class user {
@@ -39,6 +43,9 @@ public class user {
 
     @ManyToOne
     private roles roles;
+
+    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+    private Set<factory> factorys= new HashSet<>();;
 
     @Column(nullable = false)
     private int subscription;
