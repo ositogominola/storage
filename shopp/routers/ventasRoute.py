@@ -8,6 +8,8 @@ vnt=ventaController()
 superC=superController()
 inv=invoiceController()
 
+
+
 # crear venta
 @venta.route("/venta", methods=['POST'])
 def create():

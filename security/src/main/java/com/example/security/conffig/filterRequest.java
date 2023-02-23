@@ -30,19 +30,23 @@ public class filterRequest extends GenericFilterBean {
     @Autowired
     private classRolRepo rolRepo;
 
+    private static final ArrayList<String> urlIgnore = new ArrayList<>();
+    static {
+        urlIgnore.add("/error");
+        urlIgnore.add("/user/create");
+        urlIgnore.add("/token");
+        urlIgnore.add("/cnf/verificar_permisos");
+    }
 
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-        ArrayList<String> urlIgnore = new ArrayList<>();
         var response = (HttpServletResponse) servletResponse;
         var request = (HttpServletRequest) servletRequest;
         Authentication autentication=SecurityContextHolder.getContext().getAuthentication();
 
-        urlIgnore.add("/error");
-        urlIgnore.add("/user/create");
-        urlIgnore.add("/token");
+
 
         if (request.getRequestURI().contains("cnf/getRol/") & autentication!=null){filterChain.doFilter(servletRequest,servletResponse);}
         else
@@ -75,7 +79,7 @@ public class filterRequest extends GenericFilterBean {
 
     private roles getRol(Authentication autentication, HttpServletRequest request){
         RestTemplate restTemplate = new RestTemplate();
-        String rolurl="http://127.0.0.1:8080/cnf/getRol/"+autentication.getAuthorities().toString().replace("[SCOPE_","").replace("]","");
+        String rolurl="http://127.0.0.1:9999/cnf/getRol/"+autentication.getAuthorities().toString().replace("[SCOPE_","").replace("]","");
 
         //creamos el request
         HttpHeaders headers = new HttpHeaders();

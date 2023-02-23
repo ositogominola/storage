@@ -5,7 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface factoryRepository extends JpaRepository<factory,String> {
 
-    void deleteAllById(String id);
-
 
 }

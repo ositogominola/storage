@@ -6,6 +6,7 @@ ventas = Blueprint("ventas", __name__)
 dataConfig = loadFileConfig()
 
 
+
 # crear venta con facturas (se puede comprar varios articulos a la vez)
 @ventas.route("/create_vent", methods=['POST'])
 def create_vent():

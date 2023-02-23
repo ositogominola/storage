@@ -8,15 +8,31 @@ class SuperController:
     infoProduc=InfProdController()
 
     def post_all(self, data):
-        dicti={}
-        if data["infoPro"]["stock"]>0:
-            Prd=self.ProductoContro.post(data["Product"],data["infoPro"]["idEmpresa"])
+        dicti = {}
+
+        # Verificar si el stock es mayor a cero
+        if data["infoPro"]["stock"] <= 0:
+            return jsonify({"error": "El stock debe ser mayor a cero"})
+
+        # Crear el producto
+        Prd = self.ProductoContro.post(data["Product"], data["infoPro"]["idEmpresa"])
+
+        if Prd["successful"] is False:
+            return jsonify({"error": "No se pudo crear el producto error: producto"})
         else:
-            Prd=None
-        dicti["producto"]=Prd
-        if Prd is not None:
-            print("si es")
-            data["infoPro"]["idProducto"]=Prd["Producto"]
-            inf=self.infoProduc.post(data["infoPro"])
-            dicti["infoProducto"]=inf
+            dicti["producto"] = Prd
+
+            # Actualizar el idProducto en infoPro
+            data["infoPro"]["idProducto"] = Prd["Producto"]
+
+            # Crear la información del producto
+            inf = self.infoProduc.post(data["infoPro"])
+
+            if inf["successful"]:
+                dicti["infoProducto"] = inf
+            else:
+                # Si no se pudo crear la información, eliminar el producto creado anteriormente
+                self.ProductoContro.delete(Prd["Producto"])
+                return jsonify({"error": "No se pudo crear el producto error: infoproducto"})
+
         return jsonify(dicti)
