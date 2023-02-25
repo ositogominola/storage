@@ -39,10 +39,8 @@ public class comprobacion {
         System.out.println("llego");
         if (authentication == null) {
             // Usuario no autenticado
-            System.out.println(1);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new JsonResponse(false));
         }
-        Class<?> clazz = data.getClass();
 
         String uri = data.get("url");
         String method = data.get("method");
@@ -59,8 +57,6 @@ public class comprobacion {
         Set<permission> permisos = rol.getPermissions();
 
         for (permission p : permisos) {
-            System.out.println("mandados"+uri+" "+ method);
-            System.out.println(p.getUrl() + " "+ uri);
             if (p.getUrl().equals(uri) && p.getMethod().equals(method)) {
                 // El usuario tiene los permisos necesarios
                 System.out.println(3);
@@ -71,25 +67,10 @@ public class comprobacion {
                 return ResponseEntity.ok(new JsonResponse(true));
             }
         }
-        System.out.println(5);
         // El usuario no tiene los permisos necesarios
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse(false));
     }
 
-
-
-    public class JsonResponse {
-        @JsonProperty("authorized")
-        private boolean authorized;
-
-        public JsonResponse(boolean message) {
-            this.authorized = message;
-        }
-
-        public boolean getMessage() {
-            return authorized;
-        }
-    }
 
     private roles getRol(Authentication authentication, HttpServletRequest request){
         RestTemplate restTemplate = new RestTemplate();
@@ -104,16 +85,17 @@ public class comprobacion {
         return restTemplate.exchange(rolurl, HttpMethod.GET, httpEntity, roles.class).getBody();
     }
 
+    public class JsonResponse {
+        @JsonProperty("authorized")
+        private boolean authorized;
 
-    public boolean permisos(Authentication authentication, HttpServletRequest request){
-        RestTemplate restTemplate = new RestTemplate();
-        String rolurl="http://127.0.0.1:9999/cnf/getRol/"+authentication.getAuthorities().toString().replace("[SCOPE_","").replace("]","");
+        public JsonResponse(boolean message) {
+            this.authorized = message;
+        }
 
-        //creamos el request
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization",request.getHeader("Authorization"));
-        HttpEntity<String> httpEntity = new HttpEntity<>("some body", headers);
-        return true;
+        public boolean getMessage() {
+            return authorized;
+        }
     }
 
 }

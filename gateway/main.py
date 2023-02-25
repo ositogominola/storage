@@ -28,11 +28,14 @@ def verificar():
 
     # Realizar la solicitud HTTP
     response = requests.get(url, headers=headers, json=data)
-    print(response.json().get('message', False))
     # Si la solicitud es exitosa y el usuario tiene permisos, continuar con la solicitud original
-    if response.status_code == 200 and response.json().get('authorized', False):
-        return None
+    if response.status_code == 401:
+        return make_response(jsonify({'message': 'no estas loggeado'}), 401)
 
+    elif response.status_code == 200 and response.json().get('authorized', False):
+        return None
+    elif response.status_code == 500:
+        return make_response(jsonify({'message': 'se presento '}), 500)
     # Si el usuario no tiene permisos, retornar una respuesta con un mensaje de error
     return make_response(jsonify({'message': 'No tiene permisos para acceder a este recurso'}), 403)
 
