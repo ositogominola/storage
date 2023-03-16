@@ -1,3 +1,5 @@
+import uuid
+from sqlalchemy_utils import UUIDType
 from settings.db import db, BaseModelMixin
 from models.productInformation import infProduct
 
@@ -5,7 +7,7 @@ class Producto(db.Model, BaseModelMixin):
     __tablename__='Producto'
     __table_args__ = {'extend_existing': True}
 
-    id=db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), UUIDType(binary=False), primary_key=True, default=uuid.uuid4, unique=True)
     name=db.Column(db.String(30))
     image=db.Column(db.String(50))
     details=db.Column(db.String(150))

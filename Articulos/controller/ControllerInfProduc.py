@@ -10,12 +10,11 @@ class InfProdController:
         dicti={}
         try:
             #info_schema=self.schemaInfoProd(data)
-
             if not self.get_by_data(idProducto=data["idProducto"]):
                 infPoductu=infPoduct(**data)
                 infPoductu.datatime()
                 infPoductu.save()
-                IDprodInf=infPoductu.id
+                IDprodInf=infPoductu
                 successful = True
                 message = "la informacion fue refistrada con exitos"
 
@@ -58,10 +57,3 @@ class InfProdController:
         except Exception as e:
             return e.args
         return self.schemaInfoProds.dump(producto)
-
-    def delete(self):
-        pass
-
-    def update(self):
-        pass
-

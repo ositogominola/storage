@@ -9,30 +9,39 @@ class SuperController:
 
     def post_all(self, data):
         dicti = {}
-
-        # Verificar si el stock es mayor a cero
-        if data["infoPro"]["stock"] <= 0:
-            return jsonify({"error": "El stock debe ser mayor a cero"})
-
-        # Crear el producto
-        Prd = self.ProductoContro.post(data["Product"], data["infoPro"]["idEmpresa"])
-
-        if Prd["successful"] is False:
-            return jsonify({"error": "No se pudo crear el producto error: producto"})
-        else:
-            dicti["producto"] = Prd
-
-            # Actualizar el idProducto en infoPro
-            data["infoPro"]["idProducto"] = Prd["Producto"]
-
-            # Crear la información del producto
-            inf = self.infoProduc.post(data["infoPro"])
-
-            if inf["successful"]:
-                dicti["infoProducto"] = inf
+        try:
+            # Verificar si el stock es mayor a cero
+            if data["infoPro"]["stock"] <= 0 or data["infoPro"]["costoCompra"] <= 0 or data["infoPro"]["costoVenta"] <= 0:
+                productoU = None
+                successful = False
+                message = "error: no se permiten numeros negativos"
             else:
-                # Si no se pudo crear la información, eliminar el producto creado anteriormente
-                self.ProductoContro.delete(Prd["Producto"])
-                return jsonify({"error": "No se pudo crear el producto error: infoproducto"})
+                # Crear el producto
+                Prd = self.ProductoContro.post(data["Product"], data["infoPro"]["idEmpresa"])
+                if Prd["successful"] is False:
+                    productoU = None
+                    successful = False
+                    message = Prd["message"]
+                else:
+                    # Actualizar el idProducto en infoPro
+                    data["infoPro"]["idProducto"] = Prd["Producto"].id
 
+                    # Crear la información del producto
+                    inf = self.infoProduc.post(data["infoPro"])
+                    if inf["successful"]:
+                        productoU = {"productoID":Prd["Producto"].id, "infProdID":inf["IDprodInf"].id}
+                        successful = True
+                        message = "producto creado"
+                    else:
+                        productoU = None
+                        successful = False
+                        message = inf["message"]
+                        self.ProductoContro.delete(Prd["Producto"])
+        except Exception as e:
+            productoU = None
+            successful = False
+            message = "ERROR: {}, TYPE: {}".format(e.args, type(e))
+        dicti["Producto"] = productoU
+        dicti["successful"] = successful
+        dicti["message"] = message
         return jsonify(dicti)

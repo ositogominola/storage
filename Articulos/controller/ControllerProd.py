@@ -2,6 +2,7 @@ from models.Product import Producto
 from schemas.Productschema import ProductSchema
 from models.productInformation import infProduct
 from .GeneralController import GeneralController
+import uuid
 from settings.db import db
 from schemas.InfProducSchema import InfProductoShema
 class ControlerProduct(Producto):
@@ -26,7 +27,7 @@ class ControlerProduct(Producto):
             if not self.comprobar_repeticion_empresa(data, idEmpresa):
                 productoUN = Producto(**product_schema)
                 productoUN.save()
-                ProductoUni = productoUN.id
+                ProductoUni = productoUN
                 successful=True
                 message="el registro fue exitoso"
             else:
@@ -36,7 +37,7 @@ class ControlerProduct(Producto):
         except Exception as e:
             ProductoUni = None
             successful = False
-            message = "ERROR {} TYPE {}".format(e.args, type(e))
+            message = "ERROR Producto {} TYPE {}".format(e.args, type(e))
         dicti["Producto"] = ProductoUni
         dicti["successful"] = successful
         dicti["message"] = message
@@ -51,9 +52,10 @@ class ControlerProduct(Producto):
                 producto = None
                 successful=False
                 message = "no hay productos registrados"
-            producto = self.schemaPrs.dump(producto)
-            successful = True
-            message = "productos cargados"
+            else:
+                producto = self.schemaPrs.dump(producto)
+                successful = True
+                message = "productos cargados"
         except Exception as e:
             producto = None
             successful = False
@@ -71,7 +73,7 @@ class ControlerProduct(Producto):
             if PRDS==[]:
                 producto=None
                 successful = False
-                message = "no hay productos registrados"
+                message = "no hay productos registrados en la empresa: {}".format(idEmpresa)
             else:
                 successful = True
                 message = "productos cargados"
@@ -153,7 +155,7 @@ class ControlerProduct(Producto):
                     message = "el producto bajo el id {} fue eliminado correctamente".format(id)
                 else:
                     successful = True
-                    message = "la empresa no tiene el elemnto con id {}".format(idEmpresa["idEmpresa"])
+                    message = "la empresa con id {} no tiene un producto con id {}".format(idEmpresa["idEmpresa"],id)
         except Exception as e:
             successful = False
             message = "ERROR: {}, TYPE: {}".format(e.args, type(e))
@@ -172,7 +174,7 @@ class ControlerProduct(Producto):
                 message = "el producto bajo el id {} no existe".format(id)
             else:
                 if producto.prdinfo.idEmpresa==data["infoPro"]["idEmpresa"]:
-                    if not self.comprobar_repeticion_empresa(data["Product"],producto.prdinfo.idEmpresa):
+                    if not self.comprobar_repeticion_empresa(data["Product"], producto.prdinfo.idEmpresa):
                         for dt in data["Product"]:
                             if hasattr(producto, dt):
                                 setattr(producto, dt, data["Product"][dt])
@@ -190,7 +192,7 @@ class ControlerProduct(Producto):
                 else:
                     productoU = None
                     successful = False
-                    message = "el producto bajo el id {} no existe".format(id)
+                    message = "la empresa con id {} no tiene un producto con id {}".format(data["infoPro"]["idEmpresa"],id)
         except Exception as e:
             productoU = None
             successful = False

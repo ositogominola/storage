@@ -1,13 +1,13 @@
 from settings.database import db , BaseModel
-
+import uuid
 class venta(db.Model, BaseModel):
     __tablename__='venta'
     __table_args__ = {'extend_existing': True}
 
-    id=db.Column(db.Integer, primary_key=True)
-    idproducto=db.Column(db.Integer)
+    id=db.Column(db.String(36), primary_key=True, default=uuid.uuid4)
+    idproducto=db.Column(db.String(50))
     idempresa=db.Column(db.String(50))
-    idfactura=db.Column(db.Integer, db.ForeignKey('invoice.id'))
+    idfactura=db.Column(db.String(36), db.ForeignKey('invoice.id'))
     cantidad=db.Column(db.Integer)
     precioUn=db.Column(db.Integer)
     precioTot=db.Column(db.Integer)

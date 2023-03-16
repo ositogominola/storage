@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
@@ -31,79 +32,115 @@ public class userController {
     //crear permiso
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/createPermissions")
-    public String create_permission(@RequestBody permission per){
+    public HashMap create_permission(@RequestBody permission per){
+        HashMap<String,Object> response=new HashMap<String,Object>();
         if (this.pr.existsByurl(per.getUrl())){
-
-            return "el permiso ya exise";
+            response.put("Permissions",null);
+            response.put("message","el permiso ya exise");
+            response.put("successful",false);
         }
         else {
             this.pr.save(per);
-            return "id: "+per.getIdPermission()+" use este id para asignaciones";
+            response.put("Permissions",per);
+            response.put("message","id: "+per.getIdPermission()+" use este id para asignaciones");
+            response.put("successful",true);
         }
+        return response;
     }
 
     //añadir permiso a rol
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/addpermission/{idper}/rol/{idrol}")
-    public String addpermission(@PathVariable(value = "idper") String idper,@PathVariable(value = "idrol") String idrol){
-
+    public HashMap addpermission(@PathVariable(value = "idper") String idper,@PathVariable(value = "idrol") String idrol){
+        HashMap<String,Object> response = new HashMap<String,Object>();
         Optional<roles> rolown =this.rlr.findById(idrol);
         Optional<permission> perm=this.pr.findById(idper);
 
         if (perm.isEmpty() || rolown.isEmpty()){
-            return "uno de los datos no existe";
+            response.put("message","uno de los datos no existe");
+            response.put("successful",true);
         }
         else {
             roles rl= rolown.get();
             permission prm= perm.get();
             rl.addPermission(prm);
             this.rlr.save(rl);
-            return idrol+"";
+            response.put("message","permiso agregado con exito");
+            response.put("successful",true);
         }
+        return response;
     }
 
     //crear rol
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/createRole")
-    public String create_rol(@RequestBody roles rol){
+    public HashMap create_rol(@RequestBody roles rol){
+        HashMap<String,Object> response=new HashMap<String,Object>();
         if (this.rlr.existsByname(rol.getName())){
-            return "el rol ya exise";
+            response.put("rol",null);
+            response.put("message","el rol ya exise");
+            response.put("successful",false);
         }
         else {
+            response.put("rol",rol);
+            response.put("message","id rol: "+rol.getIdRol()+" nombre: "+rol.getName());
+            response.put("successful",true);
             this.rlr.save(rol);
-            return "id rol: "+rol.getIdRol()+" nombre: "+rol.getName();
         }
+        return response;
     }
 
     //crear usuario
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/create")
-    public String create_user (@RequestBody user infoUsuario){
-
+    public HashMap create_user (@RequestBody user infoUsuario){
+        HashMap<String,Object> response=new HashMap<String,Object>();
         if ((this.ur.existsByEmail(infoUsuario.getEmail()) || (this.ur.existsByUsername(infoUsuario.getUsername()))))
         {
-            return "el usuario o correo ya existe";
+            response.put("user",null);
+            response.put("message","el usuario o correo ya existe");
+            response.put("successful",false);
         }
         else {
             if (infoUsuario.is_valid()){
                 infoUsuario.setPassword(passwordEncoder.encode(infoUsuario.getPassword()));
                 infoUsuario.setEnabled(Boolean.TRUE);
+                infoUsuario.setRoles(this.rlr.findById("2").get());
                 this.ur.save(infoUsuario);
-                return "usario creado";
+                infoUsuario.setPassword("");
+                response.put("user",infoUsuario);
+                response.put("message","el usuario fue creado exitosamente");
+                response.put("successful",true);
             }
             else {
-                return "ingrese todos los datos";
+                response.put("user",null);
+                response.put("message","el usuario no pudo ser creado");
+                response.put("successful",false);
             }
         }
+        return response;
     }
 
-    @GetMapping
-    public user prueba(Authentication authentication){
+    @PutMapping("/rol/{id}/us/{idus}")
+    public HashMap addrol(Authentication auth, @PathVariable("id") String id, @PathVariable("idus") String idus){
 
-        user owneruser=ur.findByUsername(authentication.getName()).get();
-        owneruser.setPassword("");
+        HashMap<String,Object> response=new HashMap<String,Object>();
 
-        return owneruser;
+        roles rol =this.rlr.findById(id).get();
+        if (rol!=null){
+            user us=this.ur.findById(idus).get();
+            us.setRoles(rol);
+            this.ur.save(us);
+            response.put("user",us);
+            response.put("message","el rol fuer añadido");
+            response.put("successful",true);
+        }
+        else{
+            response.put("user",null);
+            response.put("message","el rol no pudo añadido");
+            response.put("successful",true);
+        }
+        return response;
     }
 
     @Autowired

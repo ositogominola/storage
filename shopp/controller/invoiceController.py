@@ -53,7 +53,7 @@ class invoiceController():
             if facturas is None:
                 FCT = None
                 successful = False
-                message = "no hay productos registrados"
+                message = "no hay facturas registradas"
             else:
                 FCT = self.schemasinv.dump(facturas)
                 successful = True
@@ -75,7 +75,7 @@ class invoiceController():
             if facturas is None:
                 FCT = None
                 successful = False
-                message = "no hay productos registrados"
+                message = "no hay facturas registradas para la empresa bajo el id: {}".format(empresa)
             else:
                 FCT = self.schemasinv.dump(facturas)
                 successful = True
@@ -90,18 +90,23 @@ class invoiceController():
         return data
 
     #obtiene factura por id
-    def get_all_by_id(self,id):
+    def get_all_by_id(self,id,idEmpresa):
         data = {}
         try:
             facturas = self.model.get_by_id(id)
             if facturas is None:
                 FCT = None
                 successful = False
-                message = "no hay productos registrados"
+                message = "no hay factura registrada con el id: {}".format(id)
             else:
                 FCT = self.schemainv.dump(facturas)
-                successful = True
-                message = "facturas cargadas"
+                if FCT["empresa"]==idEmpresa:
+                    successful = True
+                    message = "factura cargadas"
+                else:
+                    FCT=None
+                    successful = False
+                    message = "no hay factura registrada con el id: {} en la empresa: {}".format(id,idEmpresa)
         except Exception as e:
             FCT = None
             successful = False
@@ -113,18 +118,21 @@ class invoiceController():
 
 
     #elimina una factura con todos los productos que esta tenga
-    def delete_by_id(self,id):
+    def delete_by_id(self,id,idEmpresa):
         dicti = {}
         try:
             factura = self.model.get_by_id(id=id)
-            print(factura)
             if factura is None:
                 successful = False
                 message = "la factura bajo el id {} no existe".format(id)
             else:
-                factura.delete()
-                successful = True
-                message = "la factura bajo el id {} fue eliminado correctamente".format(id)
+                if factura.empresa==idEmpresa:
+                    factura.delete()
+                    successful = True
+                    message = "factura eliminada correctamente"
+                else:
+                    successful = False
+                    message = "la factura bajo el id {} no existe en la empresa: {}".format(id,idEmpresa)
         except Exception as e:
             successful = False
             message = "ERROR: {}, TYPE: {}".format(e.args, type(e))

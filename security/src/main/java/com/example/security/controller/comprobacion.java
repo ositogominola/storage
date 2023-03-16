@@ -36,7 +36,7 @@ public class comprobacion {
 
     @GetMapping("/verificar_permisos")
     public ResponseEntity<Object> verificarPermisos(@RequestBody Map<String, String> data, Authentication authentication, HttpServletRequest request) {
-        System.out.println("llego");
+        System.out.println("verificando permiso");
         if (authentication == null) {
             // Usuario no autenticado
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new JsonResponse(false));
@@ -50,7 +50,6 @@ public class comprobacion {
 
         if (rol == null) {
             // El usuario no tiene rol asignado
-            System.out.println(2);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new JsonResponse(false));
         }
 
@@ -59,10 +58,8 @@ public class comprobacion {
         for (permission p : permisos) {
             if (p.getUrl().equals(uri) && p.getMethod().equals(method)) {
                 // El usuario tiene los permisos necesarios
-                System.out.println(3);
                 return ResponseEntity.ok(new JsonResponse(true));
             } else if (p.getUrl().endsWith("/**") && uri.startsWith(p.getUrl().replace("**", ""))) {
-                System.out.println(4);
                 // El usuario tiene los permisos necesarios para un endpoint que utiliza un patrón comodín
                 return ResponseEntity.ok(new JsonResponse(true));
             }

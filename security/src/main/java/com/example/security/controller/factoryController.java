@@ -5,107 +5,162 @@ import com.example.security.models.user;
 import com.example.security.repositories.factoryRepository;
 import com.example.security.repositories.userRepositorie;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
-import java.sql.*;
+
 @RestController
 @RequestMapping("/factory")
 public class factoryController {
-
     @Autowired
     userRepositorie rpuser;
-
     @Autowired
     factoryRepository rpFact;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/create")
-    public String create(Authentication auth, @RequestBody factory ownfactory){
-
+    public HashMap<String, Object> create(Authentication auth, @RequestBody factory ownfactory){
+        HashMap<String, Object> response=new HashMap<String,Object>();
         user usuario=rpuser.findByUsername(auth.getName()).get();
 
         if (usuario !=null){
-
             ownfactory.setUsuario(usuario);
             rpFact.save(ownfactory);
+            response.put("factory",ownfactory);
+            response.put("message","creacion exitosa");
+            response.put("successful",true);
         }
-
-        return ownfactory.getId()+": id de la empresa";
+        else {
+            response.put("factory",ownfactory);
+            response.put("message","no fue posible crear la empresa");
+            response.put("successful",true);
+        }
+        return response;
     }
 
     @GetMapping("/getall")
-    public ResponseEntity<Set<factory>> getall(Authentication auth){
+    public HashMap<String, Object> getall(Authentication auth){
+        HashMap<String,Object> response=new HashMap<String,Object>();
         user usuario=rpuser.findByUsername(auth.getName()).get();
-        for (factory f: usuario.getFactorys()) {
-            System.out.println(f);
+        if (usuario != null){
+            if (!(usuario.getFactorys().isEmpty())){
+                response.put("factory",usuario.getFactorys());
+                response.put("message","empresas cargadas");
+                response.put("successful",true);
+            }
+            else{
+                response.put("factory",null);
+                response.put("message","no a registrado ninguna empresa");
+                response.put("successful",false);
+            }
+
         }
-        return ResponseEntity.ok(usuario.getFactorys());
+        else {
+            response.put("factory",usuario.getFactorys());
+            response.put("message","no se a logeado");
+            response.put("successful",false);
+        }
+
+
+        return response;
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteFactory(@PathVariable(value = "id") int id, Authentication auth) {
+    public HashMap<String,Object> deleteFactory(@PathVariable(value = "id") int id, Authentication auth) {
+        HashMap<String,Object> response=new HashMap<String,Object>();
         Optional<factory> factoryOpt = rpFact.findById(id);
         if (factoryOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La fábrica no existe");
+            response.put("message","la fabrica no existe");
+            response.put("successful",false);
         }
-        factory factory = factoryOpt.get();
-        if (!factory.getUsuario().getUsername().equals(auth.getName())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para eliminar esta fábrica");
+        else {
+            factory factory = factoryOpt.get();
+            if (!factory.getUsuario().getUsername().equals(auth.getName())) {
+                response.put("message","No tienes permiso para eliminar esta fábrica");
+                response.put("successful",false);
+            }
+            else {
+                rpFact.delete(factory);
+                response.put("message","Fábrica eliminada correctamente");
+                response.put("successful",true);
+            }
         }
-        rpFact.delete(factory);
-        return ResponseEntity.ok("Fábrica eliminada correctamente");
+
+        return response;
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<String> UpdateFactory(@PathVariable(value = "id") int id, Authentication auth) {
-        Optional<factory> factoryOpt = rpFact.findById(id);
-        if (factoryOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La fábrica no existe");
+    public HashMap<String,Object> updateFactory(@PathVariable(value = "id") int id, @RequestBody factory fc, Authentication auth) {
+        HashMap<String,Object> response=new HashMap<String,Object>();
+        try {
+            Optional<factory> factoryOpt = rpFact.findById(id);
+
+            if (factoryOpt.isEmpty()) {
+                response.put("factory",null);
+                response.put("message","La fábrica no existe");
+                response.put("successful",false);
+            }
+            else {
+                factory factory = factoryOpt.get();
+
+                if (!factory.getUsuario().getUsername().equals(auth.getName())) {
+                    response.put("factory",null);
+                    response.put("message","No tienes permiso para actualizar esta empresa");
+                    response.put("successful",false);
+                }
+                else
+                {
+                    factory.setNombre((fc.getNombre()!=null) ? fc.getNombre() : factory.getNombre() );
+                    factory.setDireccion((fc.getDireccion()!=null) ? fc.getDireccion() : factory.getDireccion());
+                    factory.setLogo((fc.getLogo()!=null) ? fc.getLogo() : factory.getLogo());
+                    rpFact.save(factory);
+                    response.put("factory",factory);
+                    response.put("message","Fábrica actualizada correctamente");
+                    response.put("successful",true);
+                }
+
+
+            }
+
+        } catch (Exception e) {
+            response.put("factory",null);
+            response.put("message","error: "+e);
+            response.put("successful",false);
         }
-        factory factory = factoryOpt.get();
-        if (!factory.getUsuario().getUsername().equals(auth.getName())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para eliminar esta fábrica");
-        }
-        rpFact.delete(factory);
-        return ResponseEntity.ok("Fábrica eliminada correctamente");
+        return response;
     }
 
-    @Value("${spring.datasource.url}")
-    private String url;
-    @Value("${spring.datasource.username}")
-    private String user;
-    @Value("${spring.datasource.password}")
-    private String password;
+
     @GetMapping("/getByid/{id}")
-    public ResponseEntity<factory> getbyid(@PathVariable Integer id, Authentication auth){
-        factory ownerFactory = null;
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM factory as fc inner join user as us on us.id_user=fc.user_id and fc.id=? and us.username=?")) {
-            stmt.setInt(1, id);
-            stmt.setString(2, auth.getName());
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                ownerFactory = new factory();
-                ownerFactory.setId(rs.getInt("id"));
-                ownerFactory.setNombre(rs.getString("nombre"));
-                ownerFactory.setUsuario(this.rpuser.findByUsername(auth.getName()).get());
+    public HashMap<String,Object> getbyid(@PathVariable Integer id, Authentication auth){
+        HashMap<String,Object> response=new HashMap<String,Object>();
+        Optional<factory> ownerFactory = this.rpFact.findById(id);
+
+        if (ownerFactory.isPresent())
+        {
+            if (ownerFactory.get().getUsuario().getUsername().equals(auth.getName())){
+                response.put("factory",ownerFactory.get());
+                response.put("message","empresa cargada");
+                response.put("seccessful",true);
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            else
+            {
+                response.put("factory",null);
+                response.put("message","La fábrica no existe o no tienes permiso para acceder a ella");
+                response.put("seccessful",false);
+            }
         }
-        if (ownerFactory == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(ownerFactory);
+        else {
+            response.put("factory",null);
+            response.put("message","La fábrica no existe o no tienes permiso para acceder a ella");
+            response.put("seccessful",false);
         }
+        return response;
     }
 
 }

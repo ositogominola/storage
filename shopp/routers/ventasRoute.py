@@ -11,16 +11,16 @@ inv=invoiceController()
 
 
 # crear venta
-@venta.route("/venta", methods=['POST'])
-def create():
+@venta.route("/venta_create/<id>", methods=['POST'])
+def create(id):
     data = request.get_json()
-    return superC.POST(data)
+    return superC.POST(data, id)
 
 #         VENTA PRODUCTO UNITARIO
 # obtener ventas por id
-@venta.route("/venta_product_id/<int:id>",methods=['GET'])
-def get_all_by_id_product(id):
-    return vnt.GET_BY_ID(id)
+@venta.route("/venta_product_id/<id>/empr/<idEmpr>",methods=['GET'])
+def get_all_by_id_product(id,idEmpr):
+    return vnt.GET_BY_ID(id,idEmpr)
 
 @venta.route("/get_prod_id_em/<empresa>",methods=['GET'])
 def get_produc_empresa(empresa):
@@ -38,10 +38,10 @@ def get_all():
 def get_all_by_empresa(empresa):
     return inv.get_all_by_id_empr(empresa)
 
-@venta.route("/delete_facturacion_id/<int:id>",methods=['DELETE'])
-def delete_fact_empresa(id):
-    return inv.delete_by_id(id)
+@venta.route("/delete_facturacion_id/<id>/empr/<idEmp>",methods=['DELETE'])
+def delete_fact_empresa(id,idEmp):
+    return inv.delete_by_id(id,idEmp)
 
-@venta.route("/get_only_fact_id/<empresa>",methods=['GET'])
-def get_fac_empresa(empresa):
-    return inv.get_all_by_id(empresa)
+@venta.route("/get_only_fact_id/<id>/empr/<empresa>",methods=['GET'])
+def get_fac_empresa(id,empresa):
+    return inv.get_all_by_id(id,empresa)

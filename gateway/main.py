@@ -4,6 +4,7 @@ from settings.loadFileConfig import loadFileConfig
 from waitress import serve
 from Routers.articulosrouters import articulos
 from Routers.shopRouters import ventas
+from Routers.factorysrouters import factory
 import re
 from flask import request
 
@@ -11,6 +12,7 @@ from flask import request
 Gateway=Flask(__name__)
 Gateway.register_blueprint(articulos)
 Gateway.register_blueprint(ventas)
+Gateway.register_blueprint(factory)
 
 
 @Gateway.before_request

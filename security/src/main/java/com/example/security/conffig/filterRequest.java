@@ -34,7 +34,7 @@ public class filterRequest extends GenericFilterBean {
     static {
         urlIgnore.add("/error");
         urlIgnore.add("/user/create");
-        urlIgnore.add("/token");
+        urlIgnore.add("/login");
         urlIgnore.add("/cnf/verificar_permisos");
     }
 

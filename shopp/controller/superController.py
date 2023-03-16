@@ -7,16 +7,16 @@ class superController:
     prdCon=ventaController()
 
     #crea una factura y le añade los productos
-    def POST(self, data):
-        prod=[]
+    def POST(self, data,idEmpresa):
         total=0
-        factura = self.fctCon.POST()
-        for produ in data["prd"]:
-            produ["idfactura"] = factura["ventaProduc"]["id"]
-            productos = self.prdCon.POST(produ)
-            total+=productos["ventaProduc"]["precioTot"]
-            prod.append(productos)
-
-        factura=self.fctCon.UPDATE_TOTAL(factura["ventaProduc"]["id"],total,data["empresa"])
-        dicti = {"factura": factura}#, "productos": prod
-        return dicti
+        try:
+            factura = self.fctCon.POST()
+            for produ in data["prd"]:
+                if idEmpresa==produ["idempresa"]:
+                    produ["idfactura"] = factura["ventaProduc"]["id"]
+                    productos = self.prdCon.POST(produ)
+                    total+=productos["ventaProduc"]["precioTot"]
+            factura=self.fctCon.UPDATE_TOTAL(factura["ventaProduc"]["id"],total,idEmpresa)
+        except Exception as e:
+            factura={"message": "error: "+e, "successful": False}
+        return factura

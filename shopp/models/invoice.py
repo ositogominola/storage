@@ -1,11 +1,11 @@
 from datetime import datetime
 from settings.database import db, BaseModel
-
+import uuid
 class invoice(db.Model, BaseModel):
     __tablename__='invoice'
     __table_args__={'extend_existing': True}
 
-    id=db.Column(db.Integer, primary_key=True)
+    id=db.Column(db.String(36), primary_key=True, default=uuid.uuid4)
     fecha=db.Column(db.DateTime)
     total=db.Column(db.Integer)
     empresa=db.Column(db.String(20))

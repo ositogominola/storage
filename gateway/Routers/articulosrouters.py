@@ -10,40 +10,60 @@ dataConfig = loadFileConfig()
 @articulos.route("/create_art", methods=['POST'])
 def create_art():
     data = request.get_json()
-    headers = {"Content-Type": "application/json; charset=utf-8"}
+    headers = {
+        "Content-Type": "application/json; charset=utf-8"
+    }
     url = dataConfig["url-backend-Articulos"] + '/producto'
-    response = requests.post(url, headers=headers, json=data)
-    return response.json()
+    validFabri=comprobar_empresa(data["infoPro"]["idEmpresa"])
+    if validFabri:
+        response = requests.post(url, headers=headers, json=data)
+        return response.json()
+    else:
+        return "no se puede registrar el producto por que no se encontro la empresa"
+
 
 
 # elimina el articulo
-@articulos.route("/delete_art/<int:id>", methods=['DELETE'])
-def delete_Art(id):
+@articulos.route("/delete_art/<id>/factory/<idfa>", methods=['DELETE'])
+def delete_Art(id,idfa):
     headers = {"Content-Type": "application/json; charset=utf-8"}
     url = dataConfig["url-backend-Articulos"] + '/producto/' + str(id)
-    json = request.get_json()
-    response = requests.delete(url, headers=headers,json=json)
-    return response.json()
+    json = {"idEmpresa":idfa}
+    validFabri = comprobar_empresa(idfa)
+    if validFabri:
+        response = requests.delete(url, headers=headers, json=json)
+        return response.json()
+    else:
+        return "no se encuentra el producto porfavor trate de nuevo"
 
 
 # actualiza el articulo
-@articulos.route("/update_art/<int:id>", methods=['PATCH'])
+@articulos.route("/update_art/<id>", methods=['PATCH'])
 def update_Art(id):
     headers = {"Content-Type": "application/json; charset=utf-8"}
     data = request.get_json()
     url = dataConfig["url-backend-Articulos"] + '/producto/update/' + str(id)
-    response = requests.patch(url, headers=headers, json=data)
-    return response.json()
+    validFabri = comprobar_empresa(data["infoPro"]["idEmpresa"])
+    if validFabri:
+        response = requests.patch(url, headers=headers, json=data)
+        return response.json()
+    else:
+        return "no se puede actualizar la empresa"
+
 
 
 # obtiene un articulo por el id
-@articulos.route("/articulo_id/<id>", methods=['GET'])
-def get_articulo_id(id):
+@articulos.route("/articulo_id/<id>/fact/<idEmp>", methods=['GET'])
+def get_articulo_id(id,idEmp):
     headers = {"Content-Type": "application/json; charset=utf-8"}
     url = dataConfig["url-backend-Articulos"] + '/producto/' + str(id)
-    json=request.get_json()
-    response = requests.get(url, headers=headers, json=json)
-    return response.json()
+    json = {"idEmpresa":idEmp}
+    validFabri = comprobar_empresa(json["idEmpresa"])
+    if validFabri:
+        response = requests.get(url, headers=headers, json=json)
+        return response.json()
+    else:
+        return {"successful":False}
 
 
 # obtiene los articulos por empresa
@@ -51,8 +71,12 @@ def get_articulo_id(id):
 def get_Articulo_Empre(idEmpresa):
     headers = {"Content-Type": "application/json; charset=utf-8"}
     url = dataConfig["url-backend-Articulos"] + '/producto/id/' + idEmpresa
-    response = requests.get(url, headers=headers)
-    return response.json()
+    validFabri = comprobar_empresa(idEmpresa)
+    if validFabri:
+        response = requests.get(url, headers=headers)
+        return response.json()
+    else:
+        return "no se encontro la empresa o no tiene permiso para acceder a ella"
 
 # obtiene por un filtro especifico                  falta completar
 @articulos.route("/articulo-filter/<idempresa>", methods=['GET'])
@@ -69,7 +93,14 @@ def articulosfilter(idempresa):
 
 
 
-
+def comprobar_empresa(idempresa):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    verificarEmpresa = dataConfig["url-backend-security"] + "/factory/getByid/" + idempresa
+    response = requests.get(verificarEmpresa, headers=headers)
+    return response.json()["seccessful"]
 
 
 

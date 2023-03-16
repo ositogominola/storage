@@ -19,10 +19,9 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
-    @PostMapping("/token")
+    @PostMapping("/login")
     public String token(Authentication authentication) {
         String token = tokenService.generateToken(authentication);
-
         return token;
     }
 

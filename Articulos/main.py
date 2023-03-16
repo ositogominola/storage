@@ -1,4 +1,6 @@
 from flask import Flask
+from flask_uuid import FlaskUUID
+
 from routes.ProductsRouter import Product
 from settings.db import db
 from dotenv import load_dotenv
@@ -14,8 +16,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] =  f"mysql+pymysql://{os.getenv('DB_USER')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-print(app.config['SQLALCHEMY_DATABASE_URI'])
-
+FlaskUUID(app)
 db.init_app(app)
 
 app.register_blueprint(Product)

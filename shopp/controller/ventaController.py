@@ -34,11 +34,11 @@ class ventaController:
             if facturas is None:
                 PRT = None
                 successful = False
-                message = "no hay productos registrados"
+                message = "no hay ventas registradas"
             else:
                 PRT = self.schemasVnt.dump(facturas)
                 successful = True
-                message = "facturas cargadas"
+                message = "ventas cargadas"
         except Exception as e:
             PRT = None
             successful = False
@@ -49,18 +49,23 @@ class ventaController:
         return data
 
     #obtiene compras por id
-    def GET_BY_ID(self,id):
+    def GET_BY_ID(self,id,idEmpr):
         data = {}
         try:
             facturas = self.model.get_by_id(id)
             if facturas is None:
                 PRT = None
                 successful = False
-                message = "no hay productos registrados"
+                message = "no hay ventas registradas con el id {}".format(id)
             else:
                 PRT = self.schemaVnt.dump(facturas)
-                successful = True
-                message = "facturas cargadas"
+                if idEmpr==PRT["idempresa"]:
+                    successful = True
+                    message = "venta cargadas"
+                else:
+                    PRT=None
+                    successful = False
+                    message = "no hay ventas registradas con el id {} en la empresa {}".format(id,idEmpr)
         except Exception as e:
             PRT = None
             successful = False
@@ -77,11 +82,11 @@ class ventaController:
             if facturas is None:
                 PRT = None
                 successful = False
-                message = "no hay productos registrados"
+                message = "no hay ventas registradas en esta empresa"
             else:
                 PRT = self.schemasVnt.dump(facturas)
                 successful = True
-                message = "facturas cargadas"
+                message = "ventas cargadas"
         except Exception as e:
             PRT = None
             successful = False
@@ -92,18 +97,18 @@ class ventaController:
         return data
 
     #elimina la compra de un producto
-    def DELETE(self, id):
+    def DELETE(self, id, idEmpr):
         dicti = {}
         try:
             productoCompra = self.model.get_by_id(id)
             print(productoCompra)
             if productoCompra is None:
                 successful = False
-                message = "el producto bajo el id {} no existe".format(id)
+                message = "la venta bajo el id {} no existe".format(id)
             else:
                 productoCompra.delete()
                 successful = True
-                message = "el producto bajo el id {} fue eliminado correctamente".format(id)
+                message = "el venta bajo el id {} fue eliminado correctamente".format(id)
         except Exception as e:
             successful = False
             message = "ERROR: {}, TYPE: {}".format(e.args, type(e))
