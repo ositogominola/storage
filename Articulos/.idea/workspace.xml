@@ -2,32 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d462ab1d-cd37-4ea0-8481-554fc045044d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../gateway/Routers/factorysrouters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/ControllerInfProduc.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/ControllerInfProduc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/ControllerProd.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/ControllerProd.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/SuperController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/SuperController.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/Product.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/Product.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/productInformation.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/productInformation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/ProductsRouter.py" beforeDir="false" afterPath="$PROJECT_DIR$/routes/ProductsRouter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../documectacion/Sistema de administración de negocios o locales.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../documectacion/Sistema de administración de negocios o locales.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/Routers/articulosrouters.py" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/Routers/articulosrouters.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../gateway/Routers/shopRouters.py" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/Routers/shopRouters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/settings/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/settings/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/conffig/filterRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/conffig/filterRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/comprobacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/comprobacion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../security/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../security/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/factoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/factoryController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/userController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/userController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../security/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shopp/controller/invoiceController.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/controller/invoiceController.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shopp/controller/superController.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/controller/superController.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shopp/controller/ventaController.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/controller/ventaController.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shopp/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shopp/models/invoice.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/models/invoice.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shopp/models/venta.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/models/venta.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shopp/routers/ventasRoute.py" beforeDir="false" afterPath="$PROJECT_DIR$/../shopp/routers/ventasRoute.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/models/factory.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/models/factory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/models/user.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/models/user.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/repositories/factoryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/repositories/factoryRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/repositories/userRepositorie.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/repositories/userRepositorie.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,14 +36,14 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/haner/Desktop/aplicaciones/administracion de tiendas/Articulos&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "C:/Users/haner/Desktop/aplicaciones/administracion de tiendas/shopp"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\haner\Desktop\aplicaciones\administracion de tiendas\Articulos\settings" />

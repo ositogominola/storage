@@ -1,5 +1,6 @@
 package com.example.security.models;
-
+import java.util.UUID;
+import com.fasterxml.uuid.Generators;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.collection.spi.PersistentSet;
@@ -16,8 +17,8 @@ import java.util.Set;
 public class user {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idUser;
+    @GeneratedValue(generator = "uuid")
+    private UUID idUser;
 
     @Column(nullable = false)
     private String name;
@@ -45,10 +46,14 @@ public class user {
     private roles roles;
 
     @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY, cascade = CascadeType.ALL )
-    private Set<factory> factorys= new HashSet<>();;
+    private Set<factory> factorys= new HashSet<>();
 
     @Column(nullable = false)
     private int subscription;
+
+    public user(){
+        this.idUser=Generators.timeBasedGenerator().generate();
+    }
 
     public boolean is_valid(){
         if (this.name==null || this.lastname==null || this.username==null || this.email==null || this.password==null || this.age==null ||this.name=="" || this.lastname=="" || this.username=="" || this.email=="" || this.password=="" ||  this.age<=0){

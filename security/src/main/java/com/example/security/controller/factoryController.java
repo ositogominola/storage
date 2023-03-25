@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/factory")
@@ -31,6 +32,7 @@ public class factoryController {
         if (usuario !=null){
             ownfactory.setUsuario(usuario);
             rpFact.save(ownfactory);
+            ownfactory=rpFact.save(ownfactory);
             response.put("factory",ownfactory);
             response.put("message","creacion exitosa");
             response.put("successful",true);
@@ -71,7 +73,7 @@ public class factoryController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public HashMap<String,Object> deleteFactory(@PathVariable(value = "id") int id, Authentication auth) {
+    public HashMap<String,Object> deleteFactory(@PathVariable(value = "id") UUID id, Authentication auth) {
         HashMap<String,Object> response=new HashMap<String,Object>();
         Optional<factory> factoryOpt = rpFact.findById(id);
         if (factoryOpt.isEmpty()) {
@@ -95,7 +97,7 @@ public class factoryController {
     }
 
     @PatchMapping("/update/{id}")
-    public HashMap<String,Object> updateFactory(@PathVariable(value = "id") int id, @RequestBody factory fc, Authentication auth) {
+    public HashMap<String,Object> updateFactory(@PathVariable(value = "id") UUID id, @RequestBody factory fc, Authentication auth) {
         HashMap<String,Object> response=new HashMap<String,Object>();
         try {
             Optional<factory> factoryOpt = rpFact.findById(id);
@@ -137,7 +139,7 @@ public class factoryController {
 
 
     @GetMapping("/getByid/{id}")
-    public HashMap<String,Object> getbyid(@PathVariable Integer id, Authentication auth){
+    public HashMap<String,Object> getbyid(@PathVariable UUID id, Authentication auth){
         HashMap<String,Object> response=new HashMap<String,Object>();
         Optional<factory> ownerFactory = this.rpFact.findById(id);
 

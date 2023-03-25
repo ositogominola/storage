@@ -8,7 +8,7 @@ class invoice(db.Model, BaseModel):
     id=db.Column(db.String(36), primary_key=True, default=uuid.uuid4)
     fecha=db.Column(db.DateTime)
     total=db.Column(db.Integer)
-    empresa=db.Column(db.String(20))
+    empresa=db.Column(db.String(36))
     venta=db.relationship("venta", backref='invoice', cascade='delete')
 
     def __init__(self):

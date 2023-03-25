@@ -1,10 +1,14 @@
 import requests
 from flask import Flask, make_response, jsonify
+
 from settings.loadFileConfig import loadFileConfig
 from waitress import serve
+
 from Routers.articulosrouters import articulos
 from Routers.shopRouters import ventas
 from Routers.factorysrouters import factory
+from Routers.userRouters import user
+
 import re
 from flask import request
 
@@ -13,6 +17,7 @@ Gateway=Flask(__name__)
 Gateway.register_blueprint(articulos)
 Gateway.register_blueprint(ventas)
 Gateway.register_blueprint(factory)
+Gateway.register_blueprint(user)
 
 
 @Gateway.before_request
@@ -27,7 +32,8 @@ def verificar():
         'method': request.method,
         'url': request.path
     }
-
+    if request.path == '/login':
+        return None
     # Realizar la solicitud HTTP
     response = requests.get(url, headers=headers, json=data)
     # Si la solicitud es exitosa y el usuario tiene permisos, continuar con la solicitud original

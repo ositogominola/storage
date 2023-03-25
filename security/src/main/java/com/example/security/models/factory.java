@@ -2,6 +2,8 @@ package com.example.security.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import java.util.UUID;
+import com.fasterxml.uuid.Generators;
 import lombok.*;
 
 @Setter
@@ -12,8 +14,8 @@ import lombok.*;
 public class factory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generator = "uuid")
+    private UUID id;
 
     @Column()
     private String nombre;
@@ -29,4 +31,7 @@ public class factory {
     @JoinColumn(name = "user_id", nullable = false)
     user usuario;
 
+    public factory() {
+        this.id = Generators.timeBasedGenerator().generate();
+    }
 }

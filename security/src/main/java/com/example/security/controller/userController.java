@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -106,7 +107,8 @@ public class userController {
                 infoUsuario.setPassword(passwordEncoder.encode(infoUsuario.getPassword()));
                 infoUsuario.setEnabled(Boolean.TRUE);
                 infoUsuario.setRoles(this.rlr.findById("2").get());
-                this.ur.save(infoUsuario);
+                user save = this.ur.save(infoUsuario);
+                infoUsuario.setIdUser(save.getIdUser());
                 infoUsuario.setPassword("");
                 response.put("user",infoUsuario);
                 response.put("message","el usuario fue creado exitosamente");
@@ -122,13 +124,15 @@ public class userController {
     }
 
     @PutMapping("/rol/{id}/us/{idus}")
-    public HashMap addrol(Authentication auth, @PathVariable("id") String id, @PathVariable("idus") String idus){
+    public HashMap addrol(Authentication auth, @PathVariable("id") String id, @PathVariable("idus") UUID idus){
 
         HashMap<String,Object> response=new HashMap<String,Object>();
-
+        System.out.println("user "+idus);
         roles rol =this.rlr.findById(id).get();
+        System.out.println(rol);
         if (rol!=null){
             user us=this.ur.findById(idus).get();
+            System.out.println(us);
             us.setRoles(rol);
             this.ur.save(us);
             response.put("user",us);

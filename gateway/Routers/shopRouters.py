@@ -10,8 +10,7 @@ dataConfig = loadFileConfig()
 # crear venta con facturas (se puede comprar varios articulos a la vez)
 @ventas.route("/create_vent", methods=['POST'])
 def create_vent():
-    cant = False
-    json = {}
+    responseow = {}
 
     # comprobar si existe el producto
     headers = {
@@ -21,6 +20,7 @@ def create_vent():
     url = "http://" + dataConfig["url-backend"] + ":" + str(dataConfig["port"])
     dontSave = []
     for prd in data["prd"]:
+
         if data["empresa"] == prd["idempresa"]:
             urlp = url + "/articulo_id/" + str(prd["idproducto"])+"/fact/"+str(prd["idempresa"])
             json = {"idEmpresa": prd["idempresa"]}
@@ -31,6 +31,7 @@ def create_vent():
                     dontSave.append(prd)
                 else:
                     if int(producto["prdinfo"]["stock"]) <= prd["cantidad"]:
+                        responseow["except"]=str("el pedido supera el stock PRODUCTO: {}".format(producto["name"]))
                         dontSave.append(prd)
                     prd["precioUn"] = producto["prdinfo"]["costoVenta"]
             else:
@@ -51,10 +52,10 @@ def create_vent():
         successful = False
         message = "no se pudo registrar los datos"
 
-    json["datos"]=datos
-    json["successful"]=successful
-    json["message"]=message
-    return json
+    responseow["datos"]=datos
+    responseow["successful"]=successful
+    responseow["message"]=message
+    return responseow
 
 
 #        obtienen uno solo

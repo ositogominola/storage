@@ -6,7 +6,7 @@ class venta(db.Model, BaseModel):
 
     id=db.Column(db.String(36), primary_key=True, default=uuid.uuid4)
     idproducto=db.Column(db.String(50))
-    idempresa=db.Column(db.String(50))
+    idempresa=db.Column(db.String(36))
     idfactura=db.Column(db.String(36), db.ForeignKey('invoice.id'))
     cantidad=db.Column(db.Integer)
     precioUn=db.Column(db.Integer)
