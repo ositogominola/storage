@@ -14,15 +14,20 @@ def create_user():
 
 @user.route("/login", methods=["POST", "GET"])
 def login():
+    print("loggin")
     headers = {
         'Authorization': request.headers.get('Authorization'),
         "Content-Type": "application/json; charset=utf-8"
     }
     url = dataConfig["url-backend-security"] + "/login"
     token=requests.post(url, headers=headers)
+    data={}
     if token.status_code==200:
-        return token.text
-    return "credenciales incorrectas"
+        data["token"]=token.text
+        data["succesfull"]=True
+    else:
+        data["succesfull"] = False
+    return data
 
 @user.route("/addPermission/<id>/idrol/<idrol>", methods=["POST"])
 def addPermision(id, idrol):

@@ -2,14 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d462ab1d-cd37-4ea0-8481-554fc045044d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../gateway/Routers/shopRouters.py" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/Routers/shopRouters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../security/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../security/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../gateway/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/ControllerProd.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/ControllerProd.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/SuperController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/SuperController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/Routers/articulosrouters.py" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/Routers/articulosrouters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/Routers/factorysrouters.py" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/Routers/factorysrouters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/Routers/userRouters.py" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/Routers/userRouters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/comprobacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/comprobacion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/factoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/factoryController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/userController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/controller/userController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/models/factory.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/models/factory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/models/user.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/models/user.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/repositories/factoryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/repositories/factoryRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../security/src/main/java/com/example/security/repositories/userRepositorie.java" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/java/com/example/security/repositories/userRepositorie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../security/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../security/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +46,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/haner/Desktop/aplicaciones/administracion de tiendas/shopp"
+    "last_opened_file_path": "C:/Users/haner/Desktop/aplicaciones/administracion de tiendas/Articulos"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -100,22 +105,22 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>143</line>
+          <line>145</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>68</line>
+          <line>69</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>166</line>
+          <line>168</line>
           <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>46</line>
+          <line>47</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -155,12 +160,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>90</line>
+          <line>91</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/ControllerProd.py</url>
-          <line>117</line>
+          <line>119</line>
           <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

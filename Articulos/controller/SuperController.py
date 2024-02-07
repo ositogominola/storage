@@ -11,12 +11,16 @@ class SuperController:
         dicti = {}
         try:
             # Verificar si el stock es mayor a cero
+            print("aqui va bien")
             if data["infoPro"]["stock"] <= 0 or data["infoPro"]["costoCompra"] <= 0 or data["infoPro"]["costoVenta"] <= 0:
+                print("aqui va bien 2.0")
                 productoU = None
                 successful = False
                 message = "error: no se permiten numeros negativos"
             else:
                 # Crear el producto
+                print("aqui va bien 3.0")
+                print(data["Product"])
                 Prd = self.ProductoContro.post(data["Product"], data["infoPro"]["idEmpresa"])
                 if Prd["successful"] is False:
                     productoU = None

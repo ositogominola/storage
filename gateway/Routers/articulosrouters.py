@@ -16,7 +16,15 @@ def create_art():
     url = dataConfig["url-backend-Articulos"] + '/producto'
     validFabri=comprobar_empresa(data["infoPro"]["idEmpresa"])
     if validFabri:
+        for value in data['infoPro'].keys():
+            if value=="costoCompra":
+                data['infoPro']["costoCompra"]=int(data['infoPro']["costoCompra"])
+            if value=="costoVenta":
+                data['infoPro']["costoVenta"] = int(data['infoPro']["costoVenta"])
+            if value=="stock":
+                data['infoPro']["stock"] = int(data['infoPro']["stock"])
         response = requests.post(url, headers=headers, json=data)
+        print(response.json())
         return response.json()
     else:
         return "no se puede registrar el producto por que no se encontro la empresa"
@@ -79,10 +87,10 @@ def get_Articulo_Empre(idEmpresa):
         return "no se encontro la empresa o no tiene permiso para acceder a ella"
 
 # obtiene por un filtro especifico                  falta completar
-@articulos.route("/articulo-filter/<idempresa>", methods=['GET'])
-def articulosfilter(idempresa):
+@articulos.route("/articulo-filter/<idempresa>/name/<busqueda>", methods=['GET'])
+def articulosfilter(idempresa, busqueda):
     headers = {"Content-Type": "application/json; charset=utf-8"}
-    data = request.get_json()
+    data = {'name':busqueda}
     url = dataConfig["url-backend-Articulos"] + '/producto/filter/' + str(idempresa)
     response = requests.get(url, headers=headers, json=data)
     return response.json()

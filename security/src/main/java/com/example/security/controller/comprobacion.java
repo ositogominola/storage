@@ -69,9 +69,7 @@ public class comprobacion {
                 String[] splitCredentials = credentials.split(":", 2); // Separa las credenciales en usuario y contraseña
                 String username = splitCredentials[0];
                 String password = splitCredentials[1];
-                System.out.println(username+"  "+password);
                 Authentication authentication = authenticateWithBasicAuth(username, password);
-                System.out.println(authentication);
                 return comprobarPermisos(data, authentication, request);
             } else {
                 // Autenticación no soportada
@@ -157,7 +155,6 @@ public class comprobacion {
     private roles getRol(@NotNull Authentication authentication, @NotNull HttpServletRequest request){
         RestTemplate restTemplate = new RestTemplate();
         String rolurl="http://127.0.0.1:9999/cnf/getRol/"+authentication.getAuthorities().toString().replace("[","").replace("]","");
-        System.out.println("llama a "+authentication.getAuthorities().toString());
         //creamos el request
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization",request.getHeader("Authorization"));

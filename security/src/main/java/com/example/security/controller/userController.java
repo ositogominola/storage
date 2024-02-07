@@ -106,7 +106,10 @@ public class userController {
             if (infoUsuario.is_valid()){
                 infoUsuario.setPassword(passwordEncoder.encode(infoUsuario.getPassword()));
                 infoUsuario.setEnabled(Boolean.TRUE);
-                infoUsuario.setRoles(this.rlr.findById("2").get());
+                Optional<roles> rol= this.rlr.findById("2");
+                if (rol.isPresent()){
+                    infoUsuario.setRoles(rol.get());
+                }
                 user save = this.ur.save(infoUsuario);
                 infoUsuario.setIdUser(save.getIdUser());
                 infoUsuario.setPassword("");

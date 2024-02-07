@@ -22,6 +22,7 @@ class ControlerProduct(Producto):
     #crea un producto sin su informacion
     def post(self, data, idEmpresa):
         dicti = {}
+        print(data)
         try:
             product_schema = self.schemaPr.load(data)
             if not self.comprobar_repeticion_empresa(data, idEmpresa):
@@ -109,6 +110,7 @@ class ControlerProduct(Producto):
             producto = None
             successful = False
             message = "ERROR: {}, TYPE: {}".format(e.args, type(e))
+
         dicti["Producto"] = producto
         dicti["successful"] = successful
         dicti["message"] = message

@@ -31,7 +31,6 @@ public class factoryController {
 
         if (usuario !=null){
             ownfactory.setUsuario(usuario);
-            rpFact.save(ownfactory);
             ownfactory=rpFact.save(ownfactory);
             response.put("factory",ownfactory);
             response.put("message","creacion exitosa");
