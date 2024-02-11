@@ -17,6 +17,6 @@ public class classRolRepo{
     private rolesRepositorie rlp;
 
     public roles findroltByname(String name) {
-        return rlp.findByname(name);
+        return rlp.findByname(name).get();
     }
 }

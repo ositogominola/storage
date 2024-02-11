@@ -9,10 +9,13 @@ import com.example.security.repositories.userRepositorie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -130,9 +133,7 @@ public class userController {
     public HashMap addrol(Authentication auth, @PathVariable("id") String id, @PathVariable("idus") UUID idus){
 
         HashMap<String,Object> response=new HashMap<String,Object>();
-        System.out.println("user "+idus);
         roles rol =this.rlr.findById(id).get();
-        System.out.println(rol);
         if (rol!=null){
             user us=this.ur.findById(idus).get();
             System.out.println(us);
@@ -145,6 +146,23 @@ public class userController {
         else{
             response.put("user",null);
             response.put("message","el rol no pudo añadido");
+            response.put("successful",true);
+        }
+        return response;
+    }
+
+    @GetMapping
+    public HashMap getUser(Authentication auth){
+        HashMap<String,Object> response=new HashMap<String,Object>();
+
+        List<Object[]> usr =this.ur.findUserByUsername(auth.getName());
+        if(!usr.isEmpty()){
+            response.put("user",usr);
+            response.put("message","usuario");
+            response.put("successful",true);
+        }else {
+            response.put("user",null);
+            response.put("message","el usuario no existe");
             response.put("successful",true);
         }
         return response;

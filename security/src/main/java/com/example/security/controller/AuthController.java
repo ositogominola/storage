@@ -1,6 +1,10 @@
 package com.example.security.controller;
 
 import com.example.security.service.TokenService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.slf4j.Logger;
@@ -24,6 +28,17 @@ public class AuthController {
     public String token(Authentication authentication) {
         String token = tokenService.generateToken(authentication);
         return token;
+    }
+
+    @GetMapping("/isAuthenticated")
+    public ResponseEntity<?> isAuthenticated(HttpServletRequest request) {
+        String token = request.getCookies()[0].getValue();
+        boolean isValid = tokenService.verifyToken(token);
+        if (isValid) {
+            return ResponseEntity.ok("El usuario está autenticado");
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El usuario no está autenticado");
+        }
     }
 
 }

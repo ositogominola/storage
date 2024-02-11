@@ -1,8 +1,69 @@
-@import './base.css';
+.contPage {
+    border: 0px;
+    border-radius: 0px;
+    padding: 0px;
+    margin: 0px;
+    height: 100vh;
+    min-width: 15%;
+}
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+.contPageLogo {
+    padding: 40px 0px 40px 15px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.menu {
+    padding: 0px;
+}
+
+.user {
+    position: absolute;
+    bottom: 0px;
+    padding: 20px 0px 20px 15px;
+    background-color: rgb(1, 1, 212);
+    height: 85px;
+    width: 75%;
+}
+
+.user:hover {
+    background-color: rgb(0 206 255);
+}
+
+.user span {
+    color: white;
+}
+
+.userLog {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    padding: 20px 15px 20px 15px;
+    background-color: red;
+    width: 25%;
+    height: 85px;
+    justify-content: center;
+}
+
+.userLog:hover {
+    background-color: rgb(255, 127, 127);
+}
+
+.itemMenu {
+    padding: 15px 15px 15px 50px;
+    font-size: 12px;
+    color: white;
+    list-style: none;
+}
+
+.itemMenu:hover {
+    text-decoration: none;
+    background-color: rgb(13, 137, 246);
+    color: black;
+    list-style: none;
+}
+
+.itemMenu.active {
+    color: #FF0000;
+    /* Cambia esto al color que prefieras */
 }

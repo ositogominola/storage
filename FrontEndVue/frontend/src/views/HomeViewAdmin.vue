@@ -1,19 +1,9 @@
 <template>
-    <HomeComponent />
+    <HomeComponent/>
 </template>
   
-<script>
+<script setup>
 import HomeComponent from '../components/HomeComponent.vue'
 
-export default {
-    components: {
-        HomeComponent
-    },
-    created() {
-        if (!localStorage.getItem("token")) {
-            this.$router.push('/login');
-        }
-    }
-}
 </script>
   

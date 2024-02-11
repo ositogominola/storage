@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "primevue": "^3.48.1"
+  },
+  "devDependencies": {
+    "unplugin-vue-components": "^0.26.0"
+  }
+}

@@ -25,7 +25,8 @@
                                         <label class="form-label" for="typePasswordX">Password</label>
                                     </div>
 
-                                    <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Orvido su contraseña?</a>
+                                    <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Orvido su
+                                            contraseña?</a>
                                     </p>
 
                                     <button class="btn btn-outline-light btn-lg px-5" type="submit">iniciar sesion</button>
@@ -34,7 +35,8 @@
                                 </div>
 
                                 <div>
-                                    <p class="mb-0">no tienes una cuenta? <a href="#!" class="text-white-50 fw-bold">Crear Cuenta</a>
+                                    <p class="mb-0">no tienes una cuenta? <a href="#!" class="text-white-50 fw-bold">Crear
+                                            Cuenta</a>
                                     </p>
                                 </div>
 
@@ -48,8 +50,10 @@
     <div v-if="error" style="color: red;">{{ error }}</div>
 </template>
   
+
+  
 <script>
-import { base64Encode } from './utils.js';
+import axios from 'axios';
 
 export default {
     data() {
@@ -59,15 +63,13 @@ export default {
             error: ''
         };
     },
-    beforeCreate(){
-        if (localStorage.getItem("token")!=null && localStorage.getItem("token")!=""){
-            this.$router.push('/');   
-        }
+    created() {
+        this.checkAuthentication();
     },
     methods: {
         async login() {
             // Codificar el nombre de usuario y la contraseña en base64
-            const credentials = base64Encode(`${this.username}:${this.password}`);
+            const credentials = btoa(`${this.username}:${this.password}`);
 
             // Construir el encabezado de autorización
             const authHeader = `Basic ${credentials}`;
@@ -77,21 +79,34 @@ export default {
                 const response = await this.$axios.post('http://127.0.0.1:7777/login', null, {
                     headers: {
                         Authorization: authHeader
-                    }
+                    },
+                    withCredentials: true // Asegúrate de incluir esta línea para enviar las cookies
                 });
-
-                if (response.data["succesfull"]){
-                    localStorage.setItem("token",response.data["token"])
-                    window.location.href='/';
-                }else{
+                console.log(response.data)
+                if (response.data["succesfull"]) {
+                    localStorage.setItem('userInfo',response.data["user"])
+                    this.checkAuthentication();
+                } else {
                     alert("Usuario o contraseña incorrecta")
                 }
             } catch (error) {
                 console.log(error);
             }
+        },
+        async checkAuthentication() {
+            try {
+                const response = await axios.get('http://127.0.0.1:7777/isAuthenticated', { withCredentials: true });
+                if (response.status === 200) {
+                    this.$router.push('/');
+                } else {
+                    this.$router.push('/login');
+                }
+            } catch (error) {
+                console.log("no esta autenticado");
+                this.$router.push('/login');
+            }
         }
     }
 };
 </script>
-
   

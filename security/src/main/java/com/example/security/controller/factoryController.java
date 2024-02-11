@@ -47,6 +47,7 @@ public class factoryController {
     @GetMapping("/getall")
     public HashMap<String, Object> getall(Authentication auth){
         HashMap<String,Object> response=new HashMap<String,Object>();
+        System.out.println("autenticacion: "+ auth.getName());
         user usuario=rpuser.findByUsername(auth.getName()).get();
         if (usuario != null){
             if (!(usuario.getFactorys().isEmpty())){
