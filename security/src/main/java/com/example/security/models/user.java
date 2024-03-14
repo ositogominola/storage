@@ -1,5 +1,7 @@
 package com.example.security.models;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.uuid.Generators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,20 +38,35 @@ public class user {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
+    @JsonIgnore
     @Column(nullable = false)
     private Boolean enabled;
+
 
     @ManyToOne
     private roles roles;
 
+    @Column(nullable = false)
+    private int subscription;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     private Set<factory> factorys= new HashSet<>();
 
-    @Column(nullable = false)
-    private int subscription;
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_perfilesitems",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "idUser"),
+            inverseJoinColumns = @JoinColumn(name = "perfilesitems_id", referencedColumnName = "idPerfil"))
+    private Set<PerfilesItems> perfilesItems = new HashSet<>();
+
+    public void addPerfileItems(PerfilesItems pri){
+        this.perfilesItems.add(pri);
+    }
 
     public user(){
         this.idUser=Generators.timeBasedGenerator().generate();

@@ -35,7 +35,7 @@ public class filterRequest extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-        if (AuthService == null) {
+        /**if (AuthService == null) {
             ServletContext servletContext = servletRequest.getServletContext();
             WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
             AuthService = webApplicationContext.getBean(AutorizacionService.class);
@@ -47,8 +47,6 @@ public class filterRequest extends GenericFilterBean {
         data.put("url",((HttpServletRequest) servletRequest).getRequestURI());
         data.put("method",((HttpServletRequest) servletRequest).getMethod());
 
-        System.out.println("verificando: "+data.toString());
-
         Authentication autentication=SecurityContextHolder.getContext().getAuthentication();
 
         if (autentication==null) response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -56,7 +54,9 @@ public class filterRequest extends GenericFilterBean {
         boolean tienePermiso= (boolean) AuthService.comprobarPermisos(data, autentication).get("tienePermiso");
 
         if (tienePermiso) filterChain.doFilter(servletRequest,servletResponse);
-        else response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        else response.setStatus(HttpServletResponse.SC_FORBIDDEN);**/
+
+        filterChain.doFilter(servletRequest,servletResponse);
 
     }
 

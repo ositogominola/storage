@@ -15,7 +15,7 @@ public interface userRepositorie extends JpaRepository<user, UUID> {
 
     Optional<user> findByUsername(String username);
 
-    @Query("SELECT u.name, u.lastname, u.email, r.name FROM user u JOIN u.roles r WHERE u.username = ?1")
+    @Query("SELECT u.idUser, u.name, u.lastname, u.email, r.name, r.idRol FROM user u JOIN u.roles r WHERE u.username = ?1")
     List<Object[]> findUserByUsername(String username);
 
     Boolean existsByUsername(String username);

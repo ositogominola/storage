@@ -5,6 +5,7 @@
     margin: 0px;
     height: 100vh;
     min-width: 15%;
+    position: fixed;
 }
 
 .contPageLogo {
@@ -65,5 +66,24 @@
 
 .itemMenu.active {
     color: #FF0000;
-    /* Cambia esto al color que prefieras */
 }
+
+.CardItem{
+    padding: 0px;
+}
+
+a, a:hover {
+    color: inherit; 
+    text-decoration: inherit; 
+    background: inherit;
+}
+
+/* Sobrescribe los estilos de Bootstrap para el encabezado del TabPanel */
+.p-highlight {
+    color:  rgb(31, 163, 31) !important; /* Cambia el color del texto */
+    background-color:  inherit !important; /* Cambia el color de fondo */
+    /* Agrega aquí cualquier otro estilo que quieras sobrescribir */
+}
+
+
+

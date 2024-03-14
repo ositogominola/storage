@@ -23,7 +23,6 @@ Gateway.register_blueprint(ventas)
 Gateway.register_blueprint(factory)
 Gateway.register_blueprint(user)
 
-
 from werkzeug.datastructures import Headers
 
 @Gateway.before_request
@@ -46,7 +45,7 @@ def verificar():
         'method': request.method,
         'url': request.path
     }
-    if request.path == '/login' or request.path=='/isAuthenticated':
+    if request.path == '/login' or request.path=='/isAuthenticated' or request.path=='/updatePermision':
         return None
     elif request.path == '/logoutUser':
         new_headers = Headers(request.headers)
@@ -65,6 +64,17 @@ def verificar():
     elif response.status_code == 500:
         return make_response('se presento un error en el servidor', 500)
     return make_response('No tiene permisos para acceder a este recurso', 403)
+
+
+@Gateway.route("/updatePermision", methods=["PUT"])
+def updatePermision():
+    print("rutas..........")
+    headers = {
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    data=""
+    url = dataConfig["url-backend-security"] + "/user/updatePermision"
+    return requests.put(url, headers=headers).json()
 
 
 if __name__ == '__main__':

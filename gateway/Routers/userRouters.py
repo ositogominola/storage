@@ -71,7 +71,7 @@ def isAuthenticated():
         return "El usuario no está autenticado", 401
 
 
-@user.route("/addPermission/<id>/idrol/<idrol>", methods=["POST"])
+@user.route("/addPermission/<id>/rol/<idrol>", methods=["POST"])
 def addPermision(id, idrol):
     headers = {
         'Authorization': request.headers.get('Authorization'),
@@ -108,3 +108,176 @@ def addRol(idrol, idus):
     }
     url=dataConfig["url-backend-security"] +"/user/rol/"+idrol+"/us/"+idus
     return requests.put(url, headers=headers).json()
+
+@user.route("/addPerfilItemUser/<idUser>/idPerfil/<idPerfil>", methods=["PUT"])
+def addPerfilItem(idUser, idPerfil):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/AddPerfilItemUser/" + idUser + "/Perfil/" + idPerfil
+    return requests.put(url, headers=headers).json()
+
+@user.route("/getPerfiles", methods=["GET"])
+def getPerfilesUser():
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/PerfilesUser"
+    return requests.get(url, headers=headers).json()
+
+@user.route("/getRecursosPerfil/<idPerfil>/rol/<idRol>", methods=["GET"])
+def getPerfilesPermisos(idPerfil, idRol):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/PermisosPerfilItem/"+idPerfil+"/rol/"+idRol
+    return requests.get(url, headers=headers).json()
+
+@user.route("/getRoles",methods=["GET"])
+def getRolesAll():
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/getRoles"
+    return requests.get(url, headers=headers).json()
+
+
+@user.route("/getPerfilesRoles/<idRol>", methods=["GET"])
+def getPermissionRol(idRol):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/getPerfilesRol/"+idRol
+    return requests.get(url, headers=headers).json()
+
+@user.route("/getRecursosRolesFalt/<idRol>/perfil/<idPerfil>", methods=["GET"])
+def getPermissionRolFaltantes(idRol, idPerfil):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/getRecursosFaltantesRol/"+idRol+"/perfil/"+idPerfil
+    return requests.get(url, headers=headers).json()
+
+@user.route("/deletePermisoRol/<idPer>/rol/<idRol>", methods=["DELETE"])
+def deletePermisoRol(idPer, idRol):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/deletePermiso/" + idPer+"/rol/"+idRol
+    return requests.delete(url, headers=headers).json()
+
+@user.route("/getAllPermission", methods=["GET"])
+def getAllPermisoRol():
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/getAllPermission"
+    return requests.get(url, headers=headers).json()
+
+@user.route("/deletePermission/<idPer>", methods=["DELETE"])
+def deletePermission(idPer):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/deletePermision/"+idPer
+    return requests.delete(url, headers=headers).json()
+
+@user.route("/getAllUsers", methods=["GET"])
+def getAllUsera():
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/getAllUsers"
+    return requests.get(url, headers=headers).json()
+
+@user.route("/getRecursosPerfilItem/<idPerfil>/rol/<idRol>", methods=["GET"])
+def getRecursosPerfil(idPerfil, idRol):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/getRecusosPerfilItem/"+idPerfil+"/rol/"+idRol
+    return requests.get(url, headers=headers).json()
+
+
+@user.route("/getRecursosPermisos/<idRecurso>/rol/<idRol>", methods=["GET"])
+def getRecursosPermisos(idRecurso, idRol):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/getRecusosPermisos/"+idRecurso+"/rol/"+idRol
+    return requests.get(url, headers=headers).json()
+
+@user.route("/getPerfilesRolFaltante/<idRol>", methods=["GET"])
+def getPerfilesRolFaltante(idRol):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/getPerfilesRolFaltante/"+idRol
+    return requests.get(url, headers=headers).json()
+
+@user.route("/deleteRol/<idRol>", methods=["DELETE"])
+def deleteRol(idRol):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/deleteRol/" + idRol
+    return requests.delete(url, headers=headers).json()
+
+@user.route("/addPerfilRol/<idRol>/perfil/<idPerfil>", methods=["POST"])
+def addPerfilRol(idRol, idPerfil):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/addPerfilRol/" + idRol + "/perfil/"+idPerfil
+    return requests.post(url, headers=headers).json()
+
+@user.route("/deletePerfilRol/<idPerfil>/rol/<idRol>", methods=["DELETE"])
+def deletePerilRol(idPerfil, idRol):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/deletePerfilRol/" + idPerfil+"/rol/"+idRol
+    return requests.delete(url, headers=headers).json()
+
+@user.route("/deleteRecursosRol/<idRecurso>/rol/<idRol>", methods=["DELETE"])
+def deleteRecursoRol(idRecurso, idRol):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/deleteRecurso/" + idRecurso+"/rol/"+idRol
+    return requests.delete(url, headers=headers).json()
+
+@user.route("/addRecursoRol/<idRecurso>/rol/<idRol>", methods=["POST"])
+def addRecursoRol(idRecurso, idRol):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/addRecursoRol/" + idRecurso + "/rol/"+idRol
+    return requests.post(url, headers=headers).json()
+
+@user.route("/getPermisosRecursoRolFaltante/<idRecurso>/rol/<idRol>", methods=["GET"])
+def getPermisosRecursoRolFaltante(idRecurso,idRol):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/getPermisosRecursosRolFaltante/"+idRecurso+"/rol/"+idRol
+    return requests.get(url, headers=headers).json()

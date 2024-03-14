@@ -1,10 +1,8 @@
 package com.example.security.models;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -28,15 +26,25 @@ public class roles {
     @OneToMany(mappedBy = "roles")
     private Set<user> user = new HashSet<>();*/
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "roles_permissions",
-            joinColumns = @JoinColumn(name = "roles_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    Set<permission> permissions;
 
-    public void addPermission(permission permissionsi){
-        this.permissions.add(permissionsi);
-    }
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "roles_perfiles",
+            joinColumns = @JoinColumn(name = "roles_id"),
+            inverseJoinColumns = @JoinColumn(name = "perfiles_id"))
+    Set<perfiles> perfiles;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "rol")
+    private Set<PermissionAsignados> permisosAsignados;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "rol")
+    private Set<perfilesItemsAsignados> perfilesItemsAsignados;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "rol")
+    private Set<RecursosAsignados> recursosAsignados;
 
 }

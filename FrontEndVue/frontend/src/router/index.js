@@ -18,6 +18,23 @@ const router = createRouter({
           path: 'factorys',
           name: 'factorys',
           component: () => import('../views/FactorysView.vue')
+        },{
+          path: 'ItemsUserPerfil/:id/:rol',
+          name: 'ItemsUserPerfil',
+          component:()=> import('../views/ItemsView.vue'),
+          props:true
+        },{
+          path: 'AdminRoles',
+          name: 'AdminRoles',
+          component:()=>import('../views/User/RoleAdminView.vue')
+        },{
+          path: 'AdminPerfiles',
+          name: 'AdminPerfiles',
+          component:()=>import('../views/User/PerfilesPermAdminView.vue')
+        },{
+          path: 'UsersAdmin',
+          name: 'UsersAdmin',
+          component:()=>import('../views/User/UserAdminView.vue')
         }
       ],
       meta: { requiresAuth: true }

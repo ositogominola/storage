@@ -8,7 +8,7 @@
                 <span>{{ item.label }}</span>
             </template>
             <template #item="{ item }">
-                <router-link class="flex align-items-center itemMenu" :to="item.href">
+                <router-link class="flex align-items-center itemMenu" :to="item.href === 'ItemsUserPerfil' ? {name: item.href, params: { id: item.id, rol: userInfo[5] }} : item.href">
                     <span :class="item.icon" />
                     <span class="ml-2">{{ item.label }}</span>
                     <Badge v-if="item.badge" class="ml-auto" :value="item.badge" />
@@ -22,8 +22,8 @@
                     <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" class="mr-4"
                         shape="circle" />
                     <span class="inline-flex flex-column">
-                        <span class="font-bold">{{ userInfo[0] }} {{ userInfo[1] }}</span>
-                        <span class="text-sm">{{ userInfo[3] }}</span>
+                        <span class="font-bold">{{ userInfo[1] }} {{ userInfo[2] }}</span>
+                        <span class="text-sm">{{ userInfo[4] }}</span>
                     </span>
                 </Button>
                 <Button @click="logout" class="userLog p-link flex align-items-center text-color">
@@ -37,51 +37,32 @@
 <script setup>
 import axios from 'axios';
 import router from '@/router';
-import { ref } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 
 let userInfoString = localStorage.getItem('userInfo');
 let userInfo = ref(userInfoString.split(','));
 
-const items = ref([
-    {
-        label: 'Empresas', items: [
-            {
-                label: 'Crear Empresa',
-                icon: 'pi pi-plus',
-                href: '/NewFactory'
-            },
-            {
-                label: 'Mis Empresas',
-                icon: 'pi pi-eye',
-                href: '/factorys'
-            }
-        ]
-    },
-    {
-        label: 'Comercio', items: [
-            {
-                label: 'Presupuestos',
-                icon: 'pi pi-dollar',
-                href: '/presupuestos'
-            }
-        ]
-    }
-    ,
-    {
-        label: 'Chat', items: [
-            {
-                label: 'Mensajes',
-                icon: 'pi pi-comment',
-                href: '/mensaje',
-                badge: 2
-            }
+const items = ref();
 
-        ]
-    }
-]);
+async function getPerfiles() {
+    await axios.get('http://127.0.0.1:7777/getPerfiles', { withCredentials: true }).then(response => {
+        if (response.status === 200) {
+            if (response.data['successful']){
+                items.value=response.data['user'];
+            }else{
+                alert(response.data['message']);
+            }
+        }
+    }).catch(error => {
+        // Manejar errores de la solicitud
+        console.log(error);
+    });
+}
+
+onBeforeMount(getPerfiles);
 
 async function logout() {
-    await axios.post('http://127.0.0.1:7777/logoutUser', null,{ withCredentials: true }).then(response => {
+    await axios.post('http://127.0.0.1:7777/logoutUser', null, { withCredentials: true }).then(response => {
         if (response.status === 200) {
             // Redirigir al usuario a la página de inicio de sesión
             router.push("/login");
@@ -99,6 +80,7 @@ async function logout() {
     color: white;
     font-size: 14px;
 }
+
 :deep(.p-button) {
     border: 0cap;
 }

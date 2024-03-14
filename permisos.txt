@@ -1,0 +1,44 @@
+permisos requeridos del perfil:
+	
+permisos requeridos del rol:
+	/getPermisosPerfil/id.value/
+permisos posibles del recurso:
+
+1 -> crear rol  ----
+	/create_role
+
+2 -> Añadir Perfil    ----
+	/addPerfilRol/' + idRol + '/perfil/' + idPermission
+	/getPerfilesRolFaltante/' + idRolSelect.value
+
+3 -> Eliminar rol  ----
+	/deleteRol/' + idRol
+
+4 -> Eliminar Perfil  ----
+	/deletePerfilRol/' + idPerfilSl.idPerfil + '/rol/' + idRolSelect.value
+
+5 -> Añadir Recurso    ----
+	/addRecursoRol/' + idRecurso + '/rol/' + idRol
+	/getRecursosRolesFalt/' + idRolSelect
+
+6 -> Añadir Permiso  ----
+	/addPermission/' + idPermissionGroup + '/rol/' + idRolSelect.value
+	/getPermisosRecursoRolFaltante/' + id + '/rol/' + idRolSelect.value
+
+7 -> Eliminar Permiso
+	
+
+8 -> Visualizar Datos  ----
+	/getRoles
+	/getRecursosPermisos/${id}/rol/${rol}
+	/getPerfilesRoles/' + idRol
+	/getRecursosPerfilItem/' + data.idPerfil + "/rol/" + idRolSelect.value
+	
+9 -> Eliminar Recurso
+	/deleteRecursosRol/**/rol/**
+
+
+
+
+
+

@@ -24,7 +24,6 @@ public class comprobacion {
 
     @GetMapping("/verificar_permisos")
     public ResponseEntity<Object> verificarPermisos(@RequestBody Map<String, Object> data, Authentication auth) {
-        System.out.println("comprobando en el path");
         if (auth == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new JsonResponse(false));
 
         boolean comprobacion=(boolean) AuthService.comprobarPermisos(data, auth).get("tienePermiso");
