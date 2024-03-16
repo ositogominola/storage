@@ -10,11 +10,11 @@
                     <Toolbar class="mb-4">
                         <template #start>
                             <Button label="Rol Nuevo" icon="pi pi-plus" severity="success" class="mr-2"
-                                @click="CreateRolvisible = true;" />
+                                @click="CreateRolvisible = true;"/>
                         </template>
                     </Toolbar>
                     <div class="card">
-                        <Skeleton v-if="loading" type="datatable" size="large" />
+                        <Skeleton v-if="loading" type="Datatable" size="large" />
                         <DataTable v-else :value="roles" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
                             tableStyle="min-width: 50rem">
 
@@ -63,7 +63,7 @@
                                         @click="confirmDelete" />
                                 </template>
                             </Toolbar>
-                            <Skeleton v-if="loading" :type="datatable" />
+                            <Skeleton v-if="loading" :type="Datatable" />
                             <DataTable v-else :value="perfiles" paginator :rows="5"
                                 :rowsPerPageOptions="[5, 10, 20, 50]" sortable v-model:filters="filters"
                                 filterDisplay="menu" selectionMode="multiple" v-model:selection="selectedPeriles"
@@ -185,10 +185,10 @@
                                         @click="getRecursosFaltantes()" :disabled="!idRolSelect" />
                                     <Button label="Delete" icon="pi pi-trash" severity="danger"
                                         :disabled="!selectedRecursos || !selectedRecursos.length"
-                                        @click="confirmDelete" />
+                                        @click="confirmDeleteRecursosSelect" />
                                 </template>
                             </Toolbar>
-                            <Skeleton v-if="loading" :type="datatable" />
+                            <Skeleton v-if="loading" :type="Datatable" />
 
                             <DataTable v-else :value="recursosPerfil" paginator :rows="5"
                                 :rowsPerPageOptions="[5, 10, 20, 50]" sortable v-model:filters="filters"
@@ -251,7 +251,8 @@
                                         <template #header>
                                             <div style="text-align: left">
                                                 <Button icon="pi pi-trash" severity="danger" label="delete"
-                                                    :disabled="!selectedPermisos || !selectedPermisos.length" />
+                                                    :disabled="!selectedPermisos || !selectedPermisos.length" 
+                                                    @click="confirmDeletePermisoSelect"/>
                                             </div>
                                         </template>
                                         <Column selectionMode="multiple" style="width: 3rem" :exportable="false" />
@@ -264,9 +265,16 @@
                                                     :severity="getSeverity(slotProps.data.METHOD)" />
                                             </template>
                                         </Column>
+
+                                        <Column field="ID" header="Acciones">
+                                            <template #body="slotProps">
+                                                <Button icon="pi pi-trash"
+                                                    @click="confirmDeletePermiso(slotProps.data.ID)"
+                                                    severity="danger" />
+                                            </template>
+                                        </Column>
                                     </DataTable>
                                 </template>
-
                             </DataTable>
 
                             <Dialog v-model:visible="RecursosVisible" header="Añadir Recursos"
@@ -293,7 +301,7 @@
 
                                 <template #footer>
                                     <Button label="Añadir Seleccionados"
-                                        :disabled="!selectedRecursosAdd || !selectedRecursosAdd.length" />
+                                        :disabled="!selectedRecursosAdd || !selectedRecursosAdd.length" @click="addRecursosSelect"/>
                                     <Button label="Ok" icon="pi pi-check" @click="RecursosVisible = false" />
                                 </template>
                             </Dialog>
@@ -323,7 +331,8 @@
 
                                 <template #footer>
                                     <Button label="Añadir Seleccionados"
-                                        :disabled="!selectPermisosAdd || !selectPermisosAdd.length" />
+                                        :disabled="!selectPermisosAdd || !selectPermisosAdd.length"
+                                        @click="addPermisosSelect" />
                                     <Button label="Ok" icon="pi pi-check" @click="PermisosVisible = false" />
                                 </template>
                             </Dialog>
@@ -657,21 +666,6 @@ async function AñadirPermisosRol(idPermissionGroup) {
 
 //PUT
 
-async function AñadirPermisosRolSelect(idPermission, idRol) {
-    await axios.put('http://127.0.0.1:7777/addPermission/' + idPermission + '/rol/' + idRol, null, { withCredentials: true }).then(response => {
-        if (response.status === 200) {
-            if (response.data['successful']) {
-                toast.add({ severity: 'success', summary: 'Permiso Añadido', detail: 'El permiso con id ' + idPermission + ' fue Añadido', life: 3000 });
-            } else {
-                toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo añadir el Permiso', life: 3000 });
-            }
-
-        }
-    }).catch(error => {
-        // Manejar errores de la solicitud
-        toast.add({ severity: 'contrast', summary: 'Error', detail: 'Error del servidor ' + error, life: 3000 });
-    });
-}
 
 
 //DELETE
@@ -692,19 +686,18 @@ async function deleteRecursos(idRecurso) {
     });
 }
 
-async function deletePermisoRol(idPermission, idRol) {
-    await axios.delete('http://127.0.0.1:7777/deletePermisoRol/' + idPermission + '/rol/' + idRol, { withCredentials: true }).then(response => {
+async function deletePermisoRol(idPermission) {
+    await axios.delete('http://127.0.0.1:7777/deletePermisoRol/' + idPermission + '/rol/' + idRolSelect.value, { withCredentials: true }).then(response => {
         if (response.status === 200) {
             if (response.data['successful']) {
-                toast.add({ severity: 'success', summary: 'Permiso Eliminado', detail: 'El permiso fue eliminado', life: 3000 });
+                toast.add({ severity: 'success', summary: 'Permiso Eliminado', detail: response.data['message'], life: 3000 });
             } else {
                 toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el Permiso', life: 3000 });
             }
-
         }
     }).catch(error => {
         // Manejar errores de la solicitud
-        toast.add({ severity: 'contrast', summary: 'Error', detail: 'Error del servidor', life: 3000 });
+        toast.add({ severity: 'contrast', summary: 'Error', detail: 'Error del servidor: ' + error, life: 3000 });
     });
 }
 
@@ -808,6 +801,21 @@ const addPerfilesSelect = async () => {
     selectPerfilesAdd.value = null;
 }
 
+const addPermisosSelect = async () => {
+    PermisosVisible.value = true;
+    const promises = selectPermisosAdd.value.map(item => AñadirPermisosRol(item['GROUP']));
+    await Promise.all(promises);
+    toast.add({ severity: 'info', summary: 'permisos Añadidos', detail: 'los perfiles fueron añadidos', life: 3000 });
+    selectPermisosAdd.value = null;
+}
+
+const addRecursosSelect = async () => {
+    const promises = selectedRecursosAdd.value.map(item => AñadirRecursoRol(item['ID'], idRolSelect.value));
+    await Promise.all(promises);
+    toast.add({ severity: 'info', summary: 'Recursos Añadidos', detail: 'los perfiles fueron añadidos', life: 3000 });
+    selectedRecursosAdd.value = null;
+}
+
 const confirmDelete = () => {
     confirm.require({
         message: 'Seguro que quiere eliminar estos perfiles?',
@@ -880,6 +888,77 @@ const confirmDeleteRecursos = (idRecursos) => {
         }
     });
 };
+
+const confirmDeletePermiso = (idPermission) => {
+    confirm.require({
+        header: 'Seguro que quiere eliminar el permiso?',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancelar',
+        acceptLabel: 'Eliminar',
+        rejectClass: 'p-button-secondary p-button-outlined',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+            deletePermisoRol(idPermission);
+            recursosPerfil.value.forEach(item => {
+                item.expanded = false;
+            });
+        },
+        reject: () => {
+            toast.add({ severity: 'error', summary: 'Rejected', detail: 'Proceso cancelado', life: 3000 });
+        }
+    });
+};
+
+const confirmDeletePermisoSelect = () => {
+    confirm.require({
+        header: 'Seguro que quiere eliminar los permisos seleccionados?',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancelar',
+        acceptLabel: 'Eliminar',
+        rejectClass: 'p-button-secondary p-button-outlined',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+            DeletedPermisosSelect();
+            recursosPerfil.value.forEach(item => {
+                item.expanded = false;
+            });
+        },
+        reject: () => {
+            toast.add({ severity: 'error', summary: 'Rejected', detail: 'Proceso cancelado', life: 3000 });
+        }
+    });
+};
+
+const confirmDeleteRecursosSelect = () => {
+    confirm.require({
+        header: 'Seguro que quiere eliminar los recursos seleccionados??',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancelar',
+        acceptLabel: 'Eliminar',
+        rejectClass: 'p-button-secondary p-button-outlined',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+            deleteRecursosSelect();
+        },
+        reject: () => {
+            toast.add({ severity: 'error', summary: 'Rejected', detail: 'Proceso cancelado', life: 3000 });
+        }
+    });
+}
+
+const deleteRecursosSelect = async () => {
+    const promises = selectedRecursos.value.map(item => deleteRecursos(item['ID']));
+    await Promise.all(promises);
+    selectedRecursos.value = null;
+    toast.add({ severity: 'success', summary: 'Recursos eliminados', detail: 'los recursos fueron eliminados', life: 3000 });
+}
+
+const DeletedPermisosSelect = async () => {
+    const promises = selectedPermisos.value.map(item => deletePermisoRol(item['ID']));
+    await Promise.all(promises);
+    selectedPermisos.value = null;
+    toast.add({ severity: 'success', summary: 'Perfiles eliminados', detail: 'los perfiles fueron eliminados', life: 3000 });
+}
 
 const DeletePerfilesSelect = async () => {
     const promises = selectedPeriles.value.map(item => deletePerfilRol(item));

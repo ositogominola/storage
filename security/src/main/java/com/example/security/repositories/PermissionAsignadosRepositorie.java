@@ -58,4 +58,9 @@ public interface PermissionAsignadosRepositorie extends JpaRepository<Permission
             "where (r.id_recurso=?2 or p.grupo_permiso in (select distinct grupo_permiso from permission where recurso_id=?2)))"
             , nativeQuery = true)
     int deletePermisosByRolAndRecurso(int idRol, int idRecurso);
+
+    @Transactional
+    @Modifying
+    @Query(value = "delete from permission_asignados where roles_id=?1 and permission_id=?2", nativeQuery = true)
+    int deletePermiso(int idRol,int idPermiso);
 }

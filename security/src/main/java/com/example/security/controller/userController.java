@@ -548,12 +548,17 @@ public class userController {
             }
 
         } catch (Exception e){
-            response.put("message","El rol no se pudo eliminar error: "+e.getMessage());
+            if (e instanceof org.springframework.dao.DataIntegrityViolationException && e.getMessage().contains("foreign key constraint")) {
+                response.put("message", "No se puede eliminar el rol porque se encuentra en uso");
+            } else {
+                response.put("message","El rol no se pudo eliminar error: "+e.getMessage()+" error: "+e.getClass().getName());
+            }
             response.put("successful",false);
         }
         return response;
     }
 
+    //eliminar perfil
     @DeleteMapping("/deletePerfilRol/{idPer}/rol/{idRol}")
     public HashMap<String, Object> deletePerfilRol(@PathVariable int idPer, @PathVariable int idRol){
         HashMap<String, Object> response= new HashMap<>();
@@ -575,6 +580,21 @@ public class userController {
             response.put("successful",false);
         }
 
+        return response;
+    }
+
+    //eliminar permiso
+    @DeleteMapping("/deletePermiso/{idPer}/rol/{idRol}")
+    public HashMap<String, Object> deletePermRol(@PathVariable int idPer, @PathVariable int idRol){
+        HashMap<String, Object> response=new HashMap<>();
+        try {
+            this.par.deletePermiso(idRol,idPer);
+            response.put("message","Permiso eliminado");
+            response.put("successful",true);
+        }catch (Exception e){
+            response.put("message","No se pudo eliminar el permiso: error "+e.getMessage());
+            response.put("successful",false);
+        }
         return response;
     }
 
