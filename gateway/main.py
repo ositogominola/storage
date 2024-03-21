@@ -45,7 +45,7 @@ def verificar():
         'method': request.method,
         'url': request.path
     }
-    if request.path == '/login' or request.path=='/isAuthenticated' or request.path=='/updatePermision':
+    if request.path == '/login' or request.path=='/isAuthenticated':
         return None
     elif request.path == '/logoutUser':
         new_headers = Headers(request.headers)

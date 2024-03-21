@@ -29,13 +29,15 @@
                                             contraseña?</a>
                                     </p>
 
-                                    <button class="btn btn-outline-light btn-lg px-5" type="submit">iniciar sesion</button>
+                                    <button class="btn btn-outline-light btn-lg px-5" type="submit">iniciar
+                                        sesion</button>
 
 
                                 </div>
 
                                 <div>
-                                    <p class="mb-0">no tienes una cuenta? <a href="#!" class="text-white-50 fw-bold">Crear
+                                    <p class="mb-0">no tienes una cuenta? <a href="#!"
+                                            class="text-white-50 fw-bold">Crear
                                             Cuenta</a>
                                     </p>
                                 </div>
@@ -49,64 +51,57 @@
     </section>
     <div v-if="error" style="color: red;">{{ error }}</div>
 </template>
-  
 
-  
-<script>
+
+
+<script setup>
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
-export default {
-    data() {
-        return {
-            username: '',
-            password: '',
-            error: ''
-        };
-    },
-    created() {
-        this.checkAuthentication();
-    },
-    methods: {
-        async login() {
-            // Codificar el nombre de usuario y la contraseña en base64
-            const credentials = btoa(`${this.username}:${this.password}`);
+const username = ref('');
+const password = ref('');
+const error = ref('');
+const router = useRouter();
 
-            // Construir el encabezado de autorización
-            const authHeader = `Basic ${credentials}`;
-
-            try {
-                // Realizar la solicitud HTTP con Axios
-                const response = await this.$axios.post('http://127.0.0.1:7777/login', null, {
-                    headers: {
-                        Authorization: authHeader
-                    },
-                    withCredentials: true // Asegúrate de incluir esta línea para enviar las cookies
-                });
-                console.log(response.data)
-                if (response.data["succesfull"]) {
-                    localStorage.setItem('userInfo',response.data["user"])
-                    this.checkAuthentication();
-                } else {
-                    alert("Usuario o contraseña incorrecta")
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        async checkAuthentication() {
-            try {
-                const response = await axios.get('http://127.0.0.1:7777/isAuthenticated', { withCredentials: true });
-                if (response.status === 200) {
-                    this.$router.push('/');
-                } else {
-                    this.$router.push('/login');
-                }
-            } catch (error) {
-                console.log("no esta autenticado");
-                this.$router.push('/login');
-            }
+const checkAuthentication = async () => {
+    try {
+        const response = await axios.get('http://127.0.0.1:7777/isAuthenticated', { withCredentials: true });
+        if (response.status === 200) {
+            router.push('/');
+        } else {
+            router.push('/login');
         }
+    } catch (error) {
+        console.error("error: " + error);
+        router.push('/login');
+    }
+};
+
+onMounted(() => {
+    checkAuthentication();
+});
+
+const login = async () => {
+    const credentials = btoa(`${username.value}:${password.value}`);
+    const authHeader = `Basic ${credentials}`;
+
+    try {
+        const response = await axios.post('http://127.0.0.1:7777/login', null, {
+            headers: {
+                Authorization: authHeader
+            },
+            withCredentials: true
+        });
+        console.log(response.data);
+        if (response.data["succesfull"]) {
+            localStorage.setItem('userInfo', response.data["user"]);
+            checkAuthentication();
+        } else {
+            alert("Usuario o contraseña incorrecta");
+        }
+    } catch (error) {
+        console.error(error);
     }
 };
 </script>
-  

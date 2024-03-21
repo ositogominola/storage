@@ -3,6 +3,7 @@ package com.example.security.repositories;
 import com.example.security.models.permission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -21,6 +22,17 @@ public interface permissionRepositorie extends JpaRepository<permission, String>
             "WHERE pa.permission_id IS NULL AND p.recurso_id = ?1 and p.pert_recurso=1",
             nativeQuery = true)
     ArrayList<String[]> getPermisionRecursoRolmissed(int idRecurso, int idRol);
+
+    @Query(value = "SELECT CASE " +
+            "WHEN EXISTS(SELECT * FROM perfiles_items pi WHERE pi.url_front LIKE :recurso) THEN " +
+            "(SELECT CONCAT('', ',', pi.nombre) FROM perfiles_items pi WHERE pi.url_front LIKE :recurso) " +
+            "WHEN EXISTS(SELECT * FROM recursos r WHERE r.url_front LIKE :recurso) THEN " +
+            "(SELECT CONCAT( IF(pi.url_front='ItemsUserPerfil', CONCAT(pi.url_front, '/', r.perfil_item_id,'/', :idRol), pi.url_front) ,',', pi.nombre, ',', r.url_front, ',', r.name_front) as ruta FROM recursos r " +
+            "INNER JOIN perfiles_items pi ON r.perfil_item_id=pi.id_perfil " +
+            "WHERE r.url_front LIKE :recurso) " +
+            "ELSE 'no existe' " +
+            "END AS resultado; " , nativeQuery = true)
+    String[] getDireccionesRuta(@Param("recurso") String Recurso, @Param("idRol") int idRol);
 
 
 }

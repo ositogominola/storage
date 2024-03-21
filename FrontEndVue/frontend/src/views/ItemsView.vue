@@ -1,5 +1,5 @@
 <script setup>
-import ItemsComponent from '@/components/ItemsComponent.vue';
+import ItemsComponent from '@/components/Utils/ItemsComponent.vue';
 </script>
 
 <template>

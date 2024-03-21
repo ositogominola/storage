@@ -5,7 +5,7 @@
 </template>
   
 <script>
-import LoginComponent from '../components/LoginComponent.vue';
+import LoginComponent from '../components/Utils/LoginComponent.vue';
 
 export default {
     components: {
@@ -13,4 +13,4 @@ export default {
     }
 };
 </script>
-  
+  ../components/Utils/LoginComponent.vue

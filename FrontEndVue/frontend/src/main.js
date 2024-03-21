@@ -5,6 +5,7 @@ import axios from 'axios';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
+import store from './assets/store' 
 
 import "./assets/main.css"
 import "primeflex/primeflex.css";
@@ -14,7 +15,8 @@ import "primeicons/primeicons.css";
 
 const app = createApp(App)
 
-app.use(router)
+app.use(router);
+app.use(store);
 app.use(PrimeVue);
 app.use(ToastService);
 app.use(ConfirmationService);

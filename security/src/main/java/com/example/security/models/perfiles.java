@@ -23,6 +23,8 @@ public class perfiles {
     @Column(nullable = false)
     private String nombre;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "perfil", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PerfilesItems> perfilItems = new ArrayList<>();
 

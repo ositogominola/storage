@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <router-link v-for="(item, index) in Recursos" :key="index" :to="item[2]" style="margin: 10px;" class="col-md-4 CardItem">
+            <router-link v-for="(item, index) in Recursos" :key="index" :to="item[2]" style="margin: 10px;" class="col-md-4 CardItem" @click="actualizarIdRecurso(item[0])">
                 <Card :style="{ width: '100%', overflow: 'hidden', backgroundColor: item[3]}">
                     <template #title>{{ item[1] }}</template>
                     <template #subtitle>sub</template>
@@ -20,12 +20,15 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useStore } from 'vuex'
 
 const route = useRoute();
 
 const Recursos = ref();
 const id = ref(null);
 const rol=ref(null);
+const store = useStore()
+
 
 async function getRecursos() {
     await axios.get('http://127.0.0.1:7777/getRecursosPerfil/'+id.value+"/rol/"+rol.value, { withCredentials: true }).then(response => {
@@ -40,6 +43,10 @@ async function getRecursos() {
         // Manejar errores de la solicitud
         console.log(error);
     });
+}
+
+const actualizarIdRecurso = (nuevoId) => {
+  store.commit('actualizarIdRecurso', nuevoId)
 }
 
 onMounted(() => {

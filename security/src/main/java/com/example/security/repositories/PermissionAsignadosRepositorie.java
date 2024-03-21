@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 @Repository
 public interface PermissionAsignadosRepositorie extends JpaRepository<PermissionAsignados, String> {
@@ -63,4 +64,10 @@ public interface PermissionAsignadosRepositorie extends JpaRepository<Permission
     @Modifying
     @Query(value = "delete from permission_asignados where roles_id=?1 and permission_id=?2", nativeQuery = true)
     int deletePermiso(int idRol,int idPermiso);
+
+    @Query(value = "select p.id_permission, p.nombre from permission_asignados pa " +
+            "inner join permission p on p.id_permission=pa.permission_id " +
+            "inner join recursos r on r.id_recurso=p.recurso_id "+
+            "where pa.roles_id=?1 and r.url_front = ?2 ", nativeQuery = true)
+    List<String[]> getPermisosRecurso(int idRol, String idRecursos);
 }

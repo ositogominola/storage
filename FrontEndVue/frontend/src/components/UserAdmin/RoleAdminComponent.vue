@@ -3,14 +3,17 @@
         <template #title>Roles</template>
 
         <template #content>
-            <TabView v-model:activeIndex="activeIndex">
+
+            <ProgressSpinner v-if="loadingPage" />
+
+            <TabView v-else v-model:activeIndex="activeIndex" v-if="comprobarPermiso(44)">
                 <ConfirmDialog />
                 <TabPanel header="Ver Roles">
                     <Toast />
                     <Toolbar class="mb-4">
                         <template #start>
                             <Button label="Rol Nuevo" icon="pi pi-plus" severity="success" class="mr-2"
-                                @click="CreateRolvisible = true;"/>
+                                @click="CreateRolvisible = true;" v-if="comprobarPermiso(32)" />
                         </template>
                     </Toolbar>
                     <div class="card">
@@ -26,7 +29,8 @@
                                     <Button @click="getPerfilesRol(slotProps.data.idRol, slotProps.data.name)">
                                         ver perfiles
                                     </Button>
-                                    <Button @click="confirmDeleteRol(slotProps.data.idRol)" severity="danger">
+                                    <Button v-if="comprobarPermiso(74)" @click="confirmDeleteRol(slotProps.data.idRol)"
+                                        severity="danger">
                                         Eliminar Rol
                                     </Button>
                                 </template>
@@ -56,10 +60,11 @@
                         <template #content>
                             <Toolbar class="mb-4">
                                 <template #start>
-                                    <Button label="Añadir Perfil" icon="pi pi-plus" severity="success" class="mr-2"
-                                        @click="getPerfilesFaltantes" :disabled="!idRolSelect" />
-                                    <Button label="Delete" icon="pi pi-trash" severity="danger"
-                                        :disabled="!selectedPeriles || !selectedPeriles.length"
+                                    <Button v-if="comprobarPermiso(72)" label="Añadir Perfil" icon="pi pi-plus"
+                                        severity="success" class="mr-2" @click="getPerfilesFaltantes"
+                                        :disabled="!idRolSelect" />
+                                    <Button v-if="comprobarPermiso(75)" label="Delete" icon="pi pi-trash"
+                                        severity="danger" :disabled="!selectedPeriles || !selectedPeriles.length"
                                         @click="confirmDelete" />
                                 </template>
                             </Toolbar>
@@ -110,9 +115,8 @@
                                 <Column field="idPerfil" header="Recursos">
 
                                     <template #body="slotProps">
-                                        <Button label="Asignar Recursos"
-                                            @click="getRecursosRolPerfil(slotProps.data);" />
-                                        <Button severity="danger" label="Eliminar Perfil"
+                                        <Button label="Ver Recursos" @click="getRecursosRolPerfil(slotProps.data);" />
+                                        <Button v-if="comprobarPermiso(75)" severity="danger" label="Eliminar Perfil"
                                             @click="confirmDeletePerfilRol(slotProps.data);" />
                                     </template>
                                 </Column>
@@ -181,10 +185,11 @@
                             <ConfirmDialog></ConfirmDialog>
                             <Toolbar class="mb-4">
                                 <template #start>
-                                    <Button label="Añadir Recurso" icon="pi pi-plus" severity="success" class="mr-2"
-                                        @click="getRecursosFaltantes()" :disabled="!idRolSelect" />
-                                    <Button label="Delete" icon="pi pi-trash" severity="danger"
-                                        :disabled="!selectedRecursos || !selectedRecursos.length"
+                                    <Button v-if="comprobarPermiso(76)" label="Añadir Recurso" icon="pi pi-plus"
+                                        severity="success" class="mr-2" @click="getRecursosFaltantes()"
+                                        :disabled="!idRolSelect" />
+                                    <Button v-if="comprobarPermiso(78)" label="Delete" icon="pi pi-trash"
+                                        severity="danger" :disabled="!selectedRecursos || !selectedRecursos.length"
                                         @click="confirmDeleteRecursosSelect" />
                                 </template>
                             </Toolbar>
@@ -194,9 +199,9 @@
                                 :rowsPerPageOptions="[5, 10, 20, 50]" sortable v-model:filters="filters"
                                 filterDisplay="menu" v-model:selection="selectedRecursos"
                                 :expandedRows="getpermisosRecursos" @rowExpand="getPermission"
-                                @rowCollapse="onRowCollapse">
+                                @rowCollapse="onRowCollapse" :globalFilterFields="['ID', 'NAME', 'URL']">
 
-                                <Column expander style="width: 5rem" />
+                                <Column :bodyStyle="{ backgroundColor: isExpanded ? '#f0f0f0' : 'inherit' }" expander style="width: 5rem" />
                                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false" />
                                 <Column field="ID" header="id" sortable style="width: 50px">
 
@@ -238,7 +243,7 @@
                                 <Column field="ID" header="Acciones">
 
                                     <template #body="slotProps">
-                                        <Button label="Asignar Permisos"
+                                        <Button v-if="comprobarPermiso(3)" label="Asignar Permisos"
                                             @click="getPermisosFaltantes(slotProps.data.ID)" />
                                         <Button label="Eliminar Recurso"
                                             @click="confirmDeleteRecursos(slotProps.data.ID)" severity="danger" />
@@ -246,13 +251,14 @@
                                 </Column>
 
                                 <template #expansion>
-                                    <DataTable :value="permisosRecursos" v-model:selection="selectedPermisos" paginator
-                                        :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
+                                    <DataTable style="background-color: #ad8989;" :value="permisosRecursos" v-model:selection="selectedPermisos" paginator
+                                        :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" filterDisplay="menu"
+                                        v-model:filters="filtersPermisos" :globalFilterFields="['METHOD']">
                                         <template #header>
                                             <div style="text-align: left">
                                                 <Button icon="pi pi-trash" severity="danger" label="delete"
-                                                    :disabled="!selectedPermisos || !selectedPermisos.length" 
-                                                    @click="confirmDeletePermisoSelect"/>
+                                                    :disabled="!selectedPermisos || !selectedPermisos.length"
+                                                    @click="confirmDeletePermisoSelect" />
                                             </div>
                                         </template>
                                         <Column selectionMode="multiple" style="width: 3rem" :exportable="false" />
@@ -264,11 +270,20 @@
                                                 <Tag :value="slotProps.data.METHOD"
                                                     :severity="getSeverity(slotProps.data.METHOD)" />
                                             </template>
+                                            <template #filter="{ filterModel, filterCallback }">
+                                                <MultiSelect v-model="filterModel.value" @change="filterCallback()"
+                                                    :options="methods" placeholder="Any" class="p-column-filter"
+                                                    style="min-width: 14rem" :maxSelectedLabels="1">
+                                                    <template #option="slotProps">
+                                                        <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)" />
+                                                    </template>
+                                                </MultiSelect>
+                                            </template>
                                         </Column>
 
                                         <Column field="ID" header="Acciones">
                                             <template #body="slotProps">
-                                                <Button icon="pi pi-trash"
+                                                <Button v-if="comprobarPermiso(50)" icon="pi pi-trash"
                                                     @click="confirmDeletePermiso(slotProps.data.ID)"
                                                     severity="danger" />
                                             </template>
@@ -301,7 +316,8 @@
 
                                 <template #footer>
                                     <Button label="Añadir Seleccionados"
-                                        :disabled="!selectedRecursosAdd || !selectedRecursosAdd.length" @click="addRecursosSelect"/>
+                                        :disabled="!selectedRecursosAdd || !selectedRecursosAdd.length"
+                                        @click="addRecursosSelect" />
                                     <Button label="Ok" icon="pi pi-check" @click="RecursosVisible = false" />
                                 </template>
                             </Dialog>
@@ -309,17 +325,27 @@
                             <Dialog v-model:visible="PermisosVisible" header="Añadir Permiso" :style="{ width: '75vw' }"
                                 maximizable modal :contentStyle="{ height: '400px' }">
                                 <DataTable :value="permisosFaltantes" sortable tableStyle="min-width: 50rem" paginator
-                                    :rows="3" :rowsPerPageOptions="[3, 6, 10, 50]" filterDisplay="menu"
-                                    v-model:selection="selectPermisosAdd">
+                                    :rows="3" :rowsPerPageOptions="[3, 6, 10, 50]" v-model:selection="selectPermisosAdd"
+                                    filterDisplay="menu" v-model:filters="filters" :globalFilterFields="['METHOD']">
 
                                     <Column selectionMode="multiple" style="width: 3rem" :exportable="false" />
                                     <Column field="ID" header="Id" sortable></Column>
                                     <Column field="NAME" header="nombre" sortable></Column>
                                     <Column field="URL" header="url" sortable></Column>
                                     <Column field="METHOD" header="Metodo" sortable>
-                                        <template #body="slotProps">
-                                            <Tag :value="slotProps.data.METHOD"
-                                                :severity="getSeverity(slotProps.data.METHOD)" />
+                                        <template #body="{ data }">
+                                            <div class="flex align-items-center gap-2">
+                                                <Tag :value="data.METHOD" :severity="getSeverity(data.METHOD)" />
+                                            </div>
+                                        </template>
+                                        <template #filter="{ filterModel, filterCallback }">
+                                            <MultiSelect v-model="filterModel.value" @change="filterCallback()"
+                                                :options="methods" placeholder="Any" class="p-column-filter"
+                                                style="min-width: 14rem" :maxSelectedLabels="1">
+                                                <template #option="slotProps">
+                                                    <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)" />
+                                                </template>
+                                            </MultiSelect>
                                         </template>
                                     </Column>
                                     <Column field="GROUP" header="Opciones">
@@ -361,6 +387,15 @@ import { useConfirm } from "primevue/useconfirm";
 import Toast from 'primevue/toast';
 import ConfirmDialog from 'primevue/confirmdialog';
 import Skeleton from 'primevue/skeleton';
+import ProgressSpinner from 'primevue/progressspinner';
+import { useRouter } from 'vue-router';
+
+
+import { useStore } from 'vuex'
+
+// Usa la tienda Vuex
+const store = useStore()
+const router = useRouter();
 
 const roles = ref();
 const perfiles = ref();
@@ -398,6 +433,10 @@ const selectPerfilesAdd = ref();
 const selectedRecursosAdd = ref();
 const selectPermisosAdd = ref();
 
+//recurso
+const permisosRecursoActual = ref();
+const loadingPage = ref(true);
+const isExpanded=false;
 //GET
 async function getRoles() {
     loading.value = true;
@@ -582,6 +621,31 @@ async function getPermisosFaltantes(id) {
     });
 }
 
+async function getPermisosRecurso() {
+    const recursoIdSe = computed(() => store.state.idRecurso)
+    let userInfoString = localStorage.getItem('userInfo');
+    let userInfo = userInfoString.split(',');
+
+    await axios.post('http://127.0.0.1:7777/getPermisoRecursos/rol/' + userInfo[5], { UrlRecurso: router.currentRoute.value.path }, { withCredentials: true }).then(response => {
+        if (response.status === 200) {
+            if (response.data['successful']) {
+                loadingPage.value = false;
+                permisosRecursoActual.value = response.data['permisos'].map(lista => ({
+                    ID: lista[0],
+                    NAME: lista[1]
+                }));
+            } else {
+                permisosRecursoActual.value = null;
+                toast.add({ severity: 'error', summary: 'Error', detail: response.data['message'], life: 3000 });
+            }
+
+        }
+    }).catch(error => {
+        // Manejar errores de la solicitud
+        console.log(error);
+    });
+}
+
 //POST
 
 const CreateRol = async () => {
@@ -744,6 +808,11 @@ const filters = ref({
     URL: { value: null, matchMode: FilterMatchMode.CONTAINS },
     NOMBREPERFIL: { value: null, matchMode: FilterMatchMode.CONTAINS },
     NAME: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    METHOD: { value: null, matchMode: FilterMatchMode.IN },
+});
+
+const filtersPermisos = ref({
+    METHOD: { value: null, matchMode: FilterMatchMode.IN },
 });
 
 const onRowCollapse = (event) => {
@@ -978,7 +1047,7 @@ const getPermission = async (event) => {
                 item.expanded = false;
             }
         });
-
+        isExpanded: false
         const index = recursosPerfil.value.findIndex(item => item.ID === id);
         if (index !== -1) {
             const rol = idRolSelect.value;
@@ -990,7 +1059,27 @@ const getPermission = async (event) => {
         alert(error.message);
     }
 };
+
+function comprobarPermiso(id) {
+    return permisosRecursoActual.value.some(objeto => objeto.ID == id);
+}
+
+function getDireccion(){
+    
+}
+
 //FLUJO
-onMounted(getRoles)
+onMounted(() => {
+    getPermisosRecurso();
+    getRoles();
+});
+
 
 </script>
+
+<style scoped>
+/* Estilos CSS personalizados para resaltar la columna expandida */
+.expanded-table {
+  background-color: #ad8989;
+}
+</style>
