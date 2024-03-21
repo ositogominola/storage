@@ -133,6 +133,16 @@ def getAllPerfiles():
     url = dataConfig["url-backend-security"] + "/user/getAllPerfiles"
     return requests.get(url, headers=headers).json()
 
+@user.route("/getAllPerfilesItemsByPerfil/<idPerfil>", methods=["GET"])
+def getAllPerfilesItemsByPerfil(idPerfil):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/getAllPerfilesItemsByPerfil/" + idPerfil
+    response = requests.get(url, headers=headers)
+    return jsonify(response.json())
+
 #-----------------------------POST----------------------------------------
 
 @user.route("/create_user", methods=["POST"])
@@ -254,7 +264,6 @@ def getRutas(idRol):
     url = dataConfig["url-backend-security"] + "/user/getRut/" + idRol
     response = requests.post(url, headers=headers, json={"UrlRecurso": UrlRecurso})
     return jsonify(response.json())
-
 
 #-----------------------------PUT-----------------------------------------
 

@@ -314,6 +314,25 @@ public class userController {
         return response;
     }
 
+    //obtiene todos los perfiles items de un perfil
+    @GetMapping("/getAllPerfilesItemsByPerfil/{idPerfil}")
+    public HashMap<String, Object> getAllPerfilesItems(@PathVariable int idPerfil){
+        HashMap<String, Object> response=new HashMap<>();
+
+        ArrayList<String[]> data = this.pri.getPerfilesItemsByPerfil(idPerfil);
+
+        if (data.isEmpty()){
+            response.put("successful", false);
+            response.put("message", "Perfiles Items no cargados");
+        }else {
+            response.put("data", data);
+            response.put("successful", true);
+            response.put("message", "Perfiles Items cargados");
+        }
+
+        return response;
+    }
+
     //--------------------------POST-----------------------------------
 
     @PostMapping("/getpermisosrecurso/rol/{idRol}")
@@ -473,7 +492,7 @@ public class userController {
 
     //obtiene las rutas
     @PostMapping("/getRut/{idRol}")
-    public HashMap<String, Object> getRutas(@RequestBody Map<String, String> recursoP, @PathVariable int idRol){
+    public HashMap<String, Object> getRutas(@RequestBody Map<String, String> recursoP, @PathVariable int idRol) {
         HashMap<String, Object> response=new HashMap<>();
         ArrayList<HashMap<String, String>> listaRutas=new ArrayList<>();
         String recursoUrl=recursoP.get("UrlRecurso");
