@@ -10,6 +10,7 @@ import java.util.ArrayList;
 @Repository
 public interface PerfilesRepositorie extends JpaRepository<perfiles,Integer> {
 
+    Boolean existsByNombre(String nameFront);
 
 }
 

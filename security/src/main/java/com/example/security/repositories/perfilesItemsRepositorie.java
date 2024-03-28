@@ -41,7 +41,7 @@ public interface perfilesItemsRepositorie extends JpaRepository<PerfilesItems, I
             nativeQuery = true)
     ArrayList<String[]> getPerfilesRolFaltante(int idRol);
 
-    @Query(value = "select pi.id_perfil, pi.nombre, pi.url_front from perfiles_items pi where pi.perfiles_id=?1",
+    @Query(value = "select pi.id_perfil, pi.nombre, pi.url_front, pi.icon from perfiles_items pi where pi.perfiles_id=?1",
             nativeQuery = true)
     ArrayList<String[]> getPerfilesItemsByPerfil(int idPerfil);
 

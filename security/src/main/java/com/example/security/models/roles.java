@@ -28,6 +28,7 @@ public class roles {
 
 
     @JsonIgnore
+    @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "roles_perfiles",
@@ -36,14 +37,17 @@ public class roles {
     Set<perfiles> perfiles;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "rol")
     private Set<PermissionAsignados> permisosAsignados;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "rol")
     private Set<perfilesItemsAsignados> perfilesItemsAsignados;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "rol")
     private Set<RecursosAsignados> recursosAsignados;
 

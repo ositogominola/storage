@@ -3,6 +3,7 @@ package com.example.security.controller;
 import com.example.security.models.*;
 import com.example.security.repositories.*;
 import jakarta.persistence.OneToMany;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import java.security.Permission;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -150,16 +152,39 @@ public class userController {
     public HashMap<String, Object> getAllPermission() {
         HashMap<String, Object> response = new HashMap<>();
 
-        List<permission> permisos = this.pr.findAll();
+        List<permission> permisos = this.pr.findAllPermission();
+
+        // Inicializar las relaciones antes de devolver las entidades
+        for (permission permiso : permisos) {
+            Hibernate.initialize(permiso.getRecurso()); // Accede a la relación para inicializarla
+            // Si hay más relaciones, accede a ellas también
+        }
+
         if (!permisos.isEmpty()) {
-            response.put("user", permisos);
+            List<Map<String, Object>> permisosDTO = permisos.stream()
+                    .map(permiso -> {
+                        Map<String, Object> permisoDTO = new HashMap<>();
+                        permisoDTO.put("idPermission", permiso.getIdPermission());
+                        permisoDTO.put("url", permiso.getUrl());
+                        permisoDTO.put("method", permiso.getMethod());
+                        permisoDTO.put("pertRecurso", permiso.getPertRecurso());
+                        permisoDTO.put("permisoRequerido", permiso.getPermisoRequerido());
+                        permisoDTO.put("grupoPermiso", permiso.getGrupoPermiso());
+                        permisoDTO.put("urlIgnore", permiso.getUrlIgnore());
+                        permisoDTO.put("nombre", permiso.getNombre());
+                        permisoDTO.put("recursoId", permiso.getRecurso() != null ? permiso.getRecurso().getIdRecurso() : null);
+                        permisoDTO.put("recursoNombre", permiso.getRecurso() != null ? permiso.getRecurso().getNameFront() : null);
+                        return permisoDTO;
+                    })
+                    .collect(Collectors.toList());
+
+            response.put("data", permisosDTO);
             response.put("message", "Permisos cargados");
             response.put("successful", true);
         } else {
             response.put("message", "No hay permisos");
             response.put("successful", false);
         }
-
         return response;
     }
 
@@ -333,8 +358,47 @@ public class userController {
         return response;
     }
 
+    //obtiene los recursos de un perfil item
+    @GetMapping("/getRecursosByPerfilItem/{idPerfilItem}")
+    public HashMap<String, Object> getRecursoPerfilItem(@PathVariable int idPerfilItem){
+        HashMap<String, Object> response=new HashMap<>();
+
+        ArrayList<String[]> data = this.rp.findByperfilItemRecursos(idPerfilItem);
+
+        if (data.isEmpty()){
+            response.put("successful", false);
+            response.put("message", "Recursos no cargados");
+        }else {
+            response.put("data", data);
+            response.put("successful", true);
+            response.put("message", "Recursos Items cargados");
+        }
+
+        return response;
+    }
+
+    //obtiene todos los recursos
+    @GetMapping("/getAllRecursos")
+    public HashMap<String, Object> getAllRecursos(){
+        HashMap<String, Object> response=new HashMap<>();
+
+        List<Recursos> data = this.rp.findAll();
+
+        if (data.isEmpty()){
+            response.put("successful", false);
+            response.put("message", "Recursos no cargados");
+        }else {
+            response.put("data", data);
+            response.put("successful", true);
+            response.put("message", "Recursos cargados");
+        }
+
+        return response;
+    }
+
     //--------------------------POST-----------------------------------
 
+    //obtiene los permisos de un recurso por su nombre
     @PostMapping("/getpermisosrecurso/rol/{idRol}")
     public HashMap<String, Object> getPermisosRecurso(@PathVariable int idRol, @RequestBody Map<String, String> UrlRecurso){
 
@@ -353,15 +417,20 @@ public class userController {
 
     //crear permiso
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/createPermissions")
-    public HashMap create_permission(@RequestBody permission per){
-        HashMap<String,Object> response=new HashMap<String,Object>();
+    @PostMapping("/createPermissions/{idRecurso}")
+    public HashMap create_permission(@RequestBody permission per, @PathVariable int idRecurso){
+        HashMap<String,Object> response=new HashMap<>();
         if (this.pr.existsByurl(per.getUrl())){
             response.put("Permissions",null);
             response.put("message","el permiso ya exise");
             response.put("successful",false);
         }
         else {
+            if (idRecurso != 0){
+                Optional<Recursos> recurso=this.rp.findById(idRecurso);
+                if (recurso.isPresent()) per.setRecurso(recurso.get());
+            }
+
             this.pr.save(per);
             response.put("Permissions",per);
             response.put("message","id: "+per.getIdPermission()+" use este id para asignaciones");
@@ -533,6 +602,23 @@ public class userController {
         return response;
     }
 
+    @PostMapping("/createPerfil")
+    public HashMap createRol(@RequestBody perfiles perfil){
+        HashMap<String,Object> response=new HashMap<>();
+
+        if(this.per.existsByNombre(perfil.getNombre())){
+            response.put("user",null);
+            response.put("message","el Perfil ya existe");
+            response.put("successful",false);
+        }else{
+            this.per.save(perfil);
+            response.put("user",perfil);
+            response.put("message","Perfil creado");
+            response.put("successful",true);
+        }
+        return response;
+    }
+
     //--------------------------PUT-----------------------------------
 
     //añadir rol a usuario
@@ -593,6 +679,69 @@ public class userController {
         }
 
         return new HashMap<>();
+    }
+
+    //actualiza un permiso
+    @PutMapping("/updatePermission")
+    public HashMap<String, Object> UpdatePermission(@RequestBody HashMap<String, Object> update){
+        HashMap<String, Object> response=new HashMap<>();
+        Optional<permission> permiso= this.pr.findById(Integer.toString((int) update.get("idPermission")));
+        if (permiso.isPresent()){
+            permission permisoUpdate = permiso.get();
+
+            if ((Boolean) update.get("pertRecurso") && (int) update.get("recursoId") != 0){
+                Optional<Recursos> recurso = this.rp.findById((int) update.get("recursoId"));
+                if (recurso.isPresent()){
+                    permisoUpdate.setRecurso(recurso.get());
+                    permisoUpdate.setPertRecurso((Boolean) update.get("pertRecurso"));
+                    if (update.get("nombre") != null && update.get("nombre") != "" && update.get("nombre") != "null"){
+                        permisoUpdate.setNombre((String) update.get("nombre"));
+                    }
+                }
+            }else{
+                permisoUpdate.setRecurso(null);
+                permisoUpdate.setPertRecurso((Boolean) update.get("pertRecurso"));
+                permisoUpdate.setNombre(null);
+            }
+            if ((int) update.get("grupoPermiso") != -1 && (int) update.get("grupoPermiso") != 0){
+                permisoUpdate.setGrupoPermiso((int) update.get("grupoPermiso"));
+            }
+            permisoUpdate.setUrlIgnore((Boolean) update.get("urlIgnore"));
+            permisoUpdate.setUrl((String) update.get("url"));
+            permisoUpdate.setPermisoRequerido((Boolean) update.get("permisoRequerido"));
+            permisoUpdate.setMethod((String) update.get("method"));
+            permisoUpdate.setNombre((String) update.get("nombre"));
+
+            this.pr.save(permisoUpdate);
+            response.put("message","Permiso Actualizado");
+            response.put("successful",true);
+        } else {
+            response.put("message","Permiso no actualizado");
+            response.put("successful",false);
+        }
+
+        return response;
+    }
+
+    @PutMapping("/updatePerfil")
+    public HashMap<String, Object> UpdatePerfil(@RequestBody HashMap<String, Object> data){
+        HashMap<String, Object> response = new HashMap<>();
+
+        try {
+            Optional<perfiles> perfil = this.per.findById((int) data.get("id"));
+            if (perfil.isPresent()){
+                perfiles perfilesDato=perfil.get();
+                perfilesDato.setNombre((String) data.get("nombre"));
+                this.per.save(perfilesDato);
+                response.put("message","Perfil Actualizado");
+                response.put("successful",true);
+            }
+        }catch (Exception e){
+            response.put("message","Perfil no actualizado");
+            response.put("successful",false);
+        }
+
+        return response;
     }
 
     //--------------------------DELETE-----------------------------------
@@ -688,7 +837,7 @@ public class userController {
         return response;
     }
 
-    //eliminar permiso
+    //eliminar permiso de rol
     @DeleteMapping("/deletePermiso/{idPer}/rol/{idRol}")
     public HashMap<String, Object> deletePermRol(@PathVariable int idPer, @PathVariable int idRol){
         HashMap<String, Object> response=new HashMap<>();
@@ -700,6 +849,13 @@ public class userController {
             response.put("message","No se pudo eliminar el permiso: error "+e.getMessage());
             response.put("successful",false);
         }
+        return response;
+    }
+
+    @DeleteMapping("/deletePerfil/{idPerfil}")
+    public HashMap<String, Object> deletePerfil(@PathVariable int idPerfil){
+        HashMap<String, Object> response=new HashMap<>();
+
         return response;
     }
 

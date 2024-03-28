@@ -41,9 +41,11 @@ public class Recursos {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "recurso", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<permission> permisos = new ArrayList<>();
 
-    @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "recursos")
+    @JsonIgnore
     private Set<RecursosAsignados> recursosAsignados;
 }

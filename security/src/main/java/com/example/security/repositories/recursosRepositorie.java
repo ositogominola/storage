@@ -5,11 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 @Repository
 public interface recursosRepositorie extends JpaRepository<Recursos, Integer> {
-
     @Query(value = "select p.url, p.method " +
             "from perfiles_items pi  " +
             "inner join roles_perfiles prf on pi.id_perfil=prf.perfiles_id " +
@@ -33,4 +33,6 @@ public interface recursosRepositorie extends JpaRepository<Recursos, Integer> {
             "LEFT JOIN recursos_asignados ra ON r.id_recurso = ra.recursos_id AND ra.roles_id = ?1 " +
             "WHERE ra.recursos_id IS NULL AND r.perfil_item_id = ?2 ", nativeQuery = true)
     ArrayList<String[]> findFaltantesPerfilItem(int idRol, int idPerfil);
+
+
 }

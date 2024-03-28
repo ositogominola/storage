@@ -143,6 +143,24 @@ def getAllPerfilesItemsByPerfil(idPerfil):
     response = requests.get(url, headers=headers)
     return jsonify(response.json())
 
+@user.route("/getRecursosByPerfilItem/<idPerfilItem>", methods=["GET"])
+def getRecursosByPerfilItem(idPerfilItem):
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/getRecursosByPerfilItem/"+idPerfilItem
+    return requests.get(url, headers=headers).json()
+
+@user.route("/getAllRecursos", methods=["GET"])
+def getAllRecursos():
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/getAllRecursos"
+    return requests.get(url, headers=headers).json()
+
 #-----------------------------POST----------------------------------------
 
 @user.route("/create_user", methods=["POST"])
@@ -214,11 +232,14 @@ def createRol():
 @user.route("/create_permission", methods=["POST"])
 def createPermission():
     rol=request.get_json()
+    recurso=0
     headers = {
         'Authorization': request.headers.get('Authorization'),
         "Content-Type": "application/json; charset=utf-8"
     }
-    url=dataConfig["url-backend-security"] +"/user/createPermissions"
+    if rol["recursoId"]!=0 and rol["pertRecurso"] and rol["recursoId"]!=None:
+        recurso=rol["recursoId"];
+    url=dataConfig["url-backend-security"] +"/user/createPermissions/"+str(recurso)
     return requests.post(url,headers=headers, json=rol).json()
 
 @user.route("/addPerfilRol/<idRol>/perfil/<idPerfil>", methods=["POST"])
@@ -265,6 +286,17 @@ def getRutas(idRol):
     response = requests.post(url, headers=headers, json={"UrlRecurso": UrlRecurso})
     return jsonify(response.json())
 
+@user.route("/createPeril", methods=["POST"])
+def createPerfil():
+    data = request.get_json()
+    headers = {
+        'Authorization': request.headers.get('Authorization'),
+        "Content-Type": "application/json; charset=utf-8"
+    }
+    url = dataConfig["url-backend-security"] + "/user/createPerfil"
+    response = requests.post(url, headers=headers, json=data)
+    return jsonify(response.json())
+
 #-----------------------------PUT-----------------------------------------
 
 @user.route("/addRol/<idrol>/us/<idus>", methods=["PUT"])
@@ -284,6 +316,20 @@ def addPerfilItem(idUser, idPerfil):
     }
     url = dataConfig["url-backend-security"] + "/user/AddPerfilItemUser/" + idUser + "/Perfil/" + idPerfil
     return requests.put(url, headers=headers).json()
+
+@user.route("/updatePermission", methods=["PUT"])
+def updateUser():
+    data=request.get_json()
+    headers = {"Content-Type": "application/json; charset=utf-8"}
+    url=dataConfig["url-backend-security"]+"/user/updatePermission"
+    return requests.put(url, headers=headers, json=data).json()
+
+@user.route("/updatePerfil", methods=["PUT"])
+def updatePerfil():
+    data = request.get_json()
+    headers = {"Content-Type": "application/json; charset=utf-8"}
+    url = dataConfig["url-backend-security"] + "/user/updatePerfil"
+    return requests.put(url, headers=headers, json=data).json()
 
 #-----------------------------PATCH---------------------------------------
 

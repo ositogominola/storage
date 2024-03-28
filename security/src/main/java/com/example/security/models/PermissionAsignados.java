@@ -17,10 +17,12 @@ public class PermissionAsignados {
     private int idPermissionAsign;
 
     @ManyToOne
+    @ToString.Exclude
     @JoinColumn(name = "roles_id")
     private roles rol;
 
     @ManyToOne
+    @ToString.Exclude
     @JoinColumn(name = "permission_id")
     private permission permiso;
 

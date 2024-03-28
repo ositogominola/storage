@@ -11,6 +11,7 @@ import "./assets/main.css"
 import "primeflex/primeflex.css";
 import "primevue/resources/themes/lara-light-green/theme.css";
 import "primeicons/primeicons.css";
+import '@fortawesome/fontawesome-free/css/all.css'
 
 
 const app = createApp(App)

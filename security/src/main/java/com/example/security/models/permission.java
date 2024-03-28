@@ -1,9 +1,6 @@
 package com.example.security.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -34,8 +31,8 @@ public class permission {
     @Column
     private Boolean permisoRequerido;
 
-    @Column
-    private int grupoPermiso;
+    @Column(nullable = true)
+    private Integer grupoPermiso;
 
     @Column
     private Boolean urlIgnore;
@@ -43,12 +40,23 @@ public class permission {
     @Column
     private String nombre;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recurso_id")
-    @ToString.Exclude
-    @JsonIgnore
     private Recursos recurso;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "permiso")
     private Set<PermissionAsignados> permisosAsignados;
+
+    // Método getter personalizado para grupoPermiso
+    @Column
+    public int getGrupoPermiso() {
+        return grupoPermiso != null ? grupoPermiso : -1;
+    }
+
+    @JsonProperty("recursoId")
+    public int getRecursoId() {
+        return recurso != null ? recurso.getIdRecurso() : -1;
+    }
 }

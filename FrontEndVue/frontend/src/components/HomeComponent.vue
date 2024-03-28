@@ -7,7 +7,7 @@
             </div>
             <!-- Panel 2 -->
             <div class="col-md-10">
-                <Breadcrumb :home="home" :model="items" style="margin-bottom: 20px;">
+                <Breadcrumb :home="home" :model="items" style="margin-bottom: 20px; margin-top: 20px;">
                     <template #item="{ item }">
                         <router-link v-if="item.route" v-slot="{ href, navigate, isActive }" :to="item.route" custom>
                             <a :href="href" @click="navigate">

@@ -1064,16 +1064,12 @@ function comprobarPermiso(id) {
     return permisosRecursoActual.value.some(objeto => objeto.ID == id);
 }
 
-function getDireccion(){
-    
-}
 
 //FLUJO
 onMounted(() => {
     getPermisosRecurso();
     getRoles();
 });
-
 
 </script>
 

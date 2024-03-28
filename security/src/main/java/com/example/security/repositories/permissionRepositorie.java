@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.security.Permission;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -34,5 +36,6 @@ public interface permissionRepositorie extends JpaRepository<permission, String>
             "END AS resultado; " , nativeQuery = true)
     String[] getDireccionesRuta(@Param("recurso") String Recurso, @Param("idRol") int idRol);
 
-
+    @Query(value= "SELECT p FROM permission p")
+    List<permission> findAllPermission();
 }
